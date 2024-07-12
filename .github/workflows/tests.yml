@@ -1,50 +1,35 @@
 name: Unit Tests
 
 on:
-  schedule:
-    - cron: '0 0 * * *'
   push:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
-  default:
-    strategy:
-      matrix:
-        node: [16, 18]
-        os: [macos-latest, ubuntu-22.04]
-    runs-on: ${{ matrix.os }}
+  test:
+    runs-on: ubuntu-latest
     steps:
-      - name: Skip when run node.js@18 on ubuntu for compatibility reason
-        id: is_skip
-        if: matrix.os == 'ubuntu-22.04' && matrix.node == '18'
-        run: echo 'IS_SKIP=true' >> $GITHUB_OUTPUT
+      - name: Checkout rgbpp-sdk
+        uses: actions/checkout@v4
 
-      - uses: actions/checkout@v3
-        if: ${{ steps.is_skip.outputs.IS_SKIP != 'true' }}
-
-      - name: Setup Node
-        if: ${{ steps.is_skip.outputs.IS_SKIP != 'true' }}
-        uses: actions/setup-node@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 20.x
 
-      - name: Restore
-        if: ${{ steps.is_skip.outputs.IS_SKIP != 'true' }}
-        uses: actions/cache@v3
+      - uses: pnpm/action-setup@v3
+        name: Install -g pnpm
         with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          version: 8
+          run_install: false
 
       - name: Install Deps
-        if: ${{ steps.is_skip.outputs.IS_SKIP != 'true' }}
         run: pnpm install
 
       - name: Compile
-        if: ${{ steps.is_skip.outputs.IS_SKIP != 'true' }}
         run: pnpm build
 
       - name: Test
-        if: ${{ steps.is_skip.outputs.IS_SKIP != 'true' }}
         run: pnpm test
