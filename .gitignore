@@ -1,7 +1,7 @@
 .vscode/
 node_modules/
 *.log
-packages/*/lib
+packages/*/dist
 .idea
 */**/package-lock.json
 */**/debug.ts
@@ -13,10 +13,6 @@ playground.ts
 
 #docs
 /docs
-# ignore for deploy docs
-yarn.lock
 
 # coverage
 coverage
-
-*/**/umd
