@@ -1,4 +1,4 @@
-import { CKBComponents } from '../../types'
+import { BranchComponents } from '../../types'
 import chainRpc from './chain'
 import experimentalRpc from './experimental'
 import netRpc from './net'
@@ -6,7 +6,7 @@ import poolRpc from './pool'
 import statsRpc from './stats'
 
 export interface RpcProperties {
-  [name: string]: Omit<CKBComponents.Method, 'name'>
+  [name: string]: Omit<BranchComponents.Method, 'name'>
 }
 
 export const rpcProperties: RpcProperties = {
@@ -28,7 +28,7 @@ export interface Base {
    * @description rpc to get the number of blocks in the longest blockchain
    * @return {Promise<string>} block number
    */
-  getTipBlockNumber: () => Promise<CKBComponents.BlockNumber>
+  getTipBlockNumber: () => Promise<BranchComponents.BlockNumber>
 
   /**
    * @method getTipHeader
@@ -36,7 +36,7 @@ export interface Base {
    * @description rpc to get the tip header of the longeest blockchain
    * @return {Promise<object>} block header
    */
-  getTipHeader: () => Promise<CKBComponents.BlockHeader>
+  getTipHeader: () => Promise<BranchComponents.BlockHeader>
 
   /**
    * @method getCurrentEpoch
@@ -45,7 +45,7 @@ export interface Base {
    * @return {Promise<object>} epoch info, including block reward, difficulty, last_block_hash_in_previous_epoch,
    *                           length, number, remainder reward, start number
    */
-  getCurrentEpoch: () => Promise<CKBComponents.Epoch>
+  getCurrentEpoch: () => Promise<BranchComponents.Epoch>
 
   /**
    * @method getEpochByNumber
@@ -53,7 +53,7 @@ export interface Base {
    * @description rpc to get the epoch info by its number
    * @return {Promise<object>} epoch info
    */
-  getEpochByNumber: (epoch: string | bigint) => Promise<CKBComponents.Epoch>
+  getEpochByNumber: (epoch: string | bigint) => Promise<BranchComponents.Epoch>
 
   /**
    * @method getBlockHash
@@ -62,7 +62,7 @@ export interface Base {
    * @param {string} hash - block hash
    * @return {Promise<string>} block hash
    */
-  getBlockHash: (number: CKBComponents.BlockNumber | bigint) => Promise<CKBComponents.Hash>
+  getBlockHash: (number: BranchComponents.BlockNumber | bigint) => Promise<BranchComponents.Hash>
 
   /**
    * @method getBlock
@@ -71,7 +71,7 @@ export interface Base {
    * @param {string} hash - the block hash of the target block
    * @returns {Promise<object>} block object
    */
-  getBlock: (hash: CKBComponents.Hash) => Promise<CKBComponents.Block>
+  getBlock: (hash: BranchComponents.Hash) => Promise<BranchComponents.Block>
 
   /**
    * @method getHeader
@@ -79,7 +79,7 @@ export interface Base {
    * @description Returns the information about a block header by hash.
    * @params {Promise<string>} block hash
    */
-  getHeader: (blockHash: CKBComponents.Hash) => Promise<CKBComponents.BlockHeader>
+  getHeader: (blockHash: BranchComponents.Hash) => Promise<BranchComponents.BlockHeader>
 
   /**
    * @method getHeaderByNumber
@@ -87,7 +87,7 @@ export interface Base {
    * @description Returns the information about a block header by block number
    * @params {Promise<string>} block number
    */
-  getHeaderByNumber: (blockNumber: CKBComponents.BlockNumber | bigint) => Promise<CKBComponents.BlockHeader>
+  getHeaderByNumber: (blockNumber: BranchComponents.BlockNumber | bigint) => Promise<BranchComponents.BlockHeader>
 
   /**
    * @method getLiveCell
@@ -99,11 +99,11 @@ export interface Base {
    * @return {Promise<object>} liveCellWithStatus
    */
   getLiveCell: (
-    outPoint: CKBComponents.OutPoint,
+    outPoint: BranchComponents.OutPoint,
     withData: boolean,
   ) => Promise<{
-    cell: CKBComponents.LiveCell
-    status: CKBComponents.CellStatus
+    cell: BranchComponents.LiveCell
+    status: BranchComponents.CellStatus
   }>
 
   /**
@@ -113,7 +113,7 @@ export interface Base {
    * @param {string} hash - the transaction hash of the target transaction
    * @return {Promise<object>} transaction object with transaction status
    */
-  getTransaction: (hash: CKBComponents.Hash) => Promise<CKBComponents.TransactionWithStatus>
+  getTransaction: (hash: BranchComponents.Hash) => Promise<BranchComponents.TransactionWithStatus>
 
   /**
    * @method getCellbaseOutputCapacityDetails
@@ -125,8 +125,8 @@ export interface Base {
    * @deprecated will be removed from v0.41.0
    */
   getCellbaseOutputCapacityDetails: (
-    blockHash: CKBComponents.Hash,
-  ) => Promise<CKBComponents.CellbaseOutputCapacityDetails>
+    blockHash: BranchComponents.Hash,
+  ) => Promise<BranchComponents.CellbaseOutputCapacityDetails>
 
   /**
    * @method getBlockEconomicState
@@ -135,7 +135,7 @@ export interface Base {
    * @param {string} blockHash
    * @returns {Promise<BlockEconomicState>}
    */
-  getBlockEconomicState: (blockHash: CKBComponents.Hash) => Promise<CKBComponents.BlockEconomicState>
+  getBlockEconomicState: (blockHash: BranchComponents.Hash) => Promise<BranchComponents.BlockEconomicState>
 
   /**
    * @method getTransactionProof
@@ -145,9 +145,9 @@ export interface Base {
    * @param {Promise<[string]>} blockHash - if specified, looks for transactions in the block with this hash
    */
   getTransactionProof: (
-    transactionHashes: CKBComponents.Hash[],
-    blockHash?: CKBComponents.Hash,
-  ) => Promise<CKBComponents.TransactionProof>
+    transactionHashes: BranchComponents.Hash[],
+    blockHash?: BranchComponents.Hash,
+  ) => Promise<BranchComponents.TransactionProof>
 
   /**
    * @method verifyTransactionProof
@@ -156,7 +156,7 @@ export interface Base {
    * @param {object} transactionProof
    * @returns {Promise<Array<string>>} hash list of transactions committed in the block
    */
-  verifyTransactionProof: (transactionProof: CKBComponents.TransactionProof) => Promise<CKBComponents.Hash[]>
+  verifyTransactionProof: (transactionProof: BranchComponents.TransactionProof) => Promise<BranchComponents.Hash[]>
 
   /**
    * @method getConsensus
@@ -164,7 +164,7 @@ export interface Base {
    * @description return various consensus parameters.
    * @returns {Promise<object>} consensus parameters
    */
-  getConsensus: () => Promise<CKBComponents.Consensus>
+  getConsensus: () => Promise<BranchComponents.Consensus>
 
   /**
    * @method getBlockByNumber
@@ -173,7 +173,7 @@ export interface Base {
    * @param {string} number - the block number of the target block
    * @returns {Promise<object>} block object
    */
-  getBlockByNumber: (number: CKBComponents.BlockNumber | bigint) => Promise<CKBComponents.Block>
+  getBlockByNumber: (number: BranchComponents.BlockNumber | bigint) => Promise<BranchComponents.Block>
 
   /* Experimental */
 
@@ -185,11 +185,11 @@ export interface Base {
    * @param {object} rawTrasnaction - the raw transaction whose cycles is going to be calculated
    * @return {Promise<object>} dry run result, including cycles the transaction used.
    */
-  dryRunTransaction: (tx: CKBComponents.RawTransaction) => Promise<CKBComponents.RunDryResult>
+  dryRunTransaction: (tx: BranchComponents.RawTransaction) => Promise<BranchComponents.RunDryResult>
 
   calculateDaoMaximumWithdraw: (
-    outPoint: CKBComponents.OutPoint,
-    withdrawBlockHash: CKBComponents.Hash256,
+    outPoint: BranchComponents.OutPoint,
+    withdrawBlockHash: BranchComponents.Hash256,
   ) => Promise<string>
 
   /* skip Miner */
@@ -202,7 +202,7 @@ export interface Base {
    * @description rpc to get the local node information
    * @return {Promise<object>} node info, including addresses, is_outbound, node id, and version
    */
-  localNodeInfo: () => Promise<CKBComponents.LocalNodeInfo>
+  localNodeInfo: () => Promise<BranchComponents.LocalNodeInfo>
 
   /**
    * @method getPeers
@@ -212,14 +212,14 @@ export interface Base {
    *
    * @deprecated will be removed from v0.41.0
    */
-  getPeers: () => Promise<CKBComponents.RemoteNodeInfo[]>
+  getPeers: () => Promise<BranchComponents.RemoteNodeInfo[]>
 
   /**
    * @method getBannedAddresses
    * @memberof DefaultRPC
    * @description Returns all banned IPs/Subnets
    */
-  getBannedAddresses: () => Promise<CKBComponents.BannedAddresses>
+  getBannedAddresses: () => Promise<BranchComponents.BannedAddresses>
 
   /**
    * @method clearBannedAddresses
@@ -256,7 +256,7 @@ export interface Base {
    * @memberof DefaultRPC
    * @description return sync state of this node
    */
-  syncState: () => Promise<CKBComponents.SyncState>
+  syncState: () => Promise<BranchComponents.SyncState>
 
   /**
    * @method setNetworkActive
@@ -307,9 +307,9 @@ export interface Base {
    * @return {Promise<string>} transaction hash
    */
   sendTransaction: (
-    tx: CKBComponents.RawTransaction,
-    outputsValidator?: CKBComponents.OutputsValidator,
-  ) => Promise<CKBComponents.Hash>
+    tx: BranchComponents.RawTransaction,
+    outputsValidator?: BranchComponents.OutputsValidator,
+  ) => Promise<BranchComponents.Hash>
 
   /**
    * @method txPoolInfo
@@ -318,7 +318,7 @@ export interface Base {
    * @return {Promise<object>} info of transaction pool, including last_txs_updated_at, number of orphan,
    *                           number of pending, number of proposed
    */
-  txPoolInfo: () => Promise<CKBComponents.TxPoolInfo>
+  txPoolInfo: () => Promise<BranchComponents.TxPoolInfo>
 
   /**
    * @method clearTxPool
@@ -335,9 +335,9 @@ export interface Base {
    * @description Returns all transaction ids in tx pool as a json array of string transaction ids.
    * @return {Promise<object>} CKBComponents.RawTxPool
    */
-  getRawTxPool(): Promise<CKBComponents.TxPoolIds>
-  getRawTxPool(verbose: true): Promise<CKBComponents.TxPoolVerbosity>
-  getRawTxPool(verbose: false | null): Promise<CKBComponents.TxPoolIds>
+  getRawTxPool(): Promise<BranchComponents.TxPoolIds>
+  getRawTxPool(verbose: true): Promise<BranchComponents.TxPoolVerbosity>
+  getRawTxPool(verbose: false | null): Promise<BranchComponents.TxPoolIds>
 
   /* Stats */
 
@@ -348,11 +348,11 @@ export interface Base {
    * @return {Promise<object>} blockchain info, including chain name, difficulty, epoch number,
    *                           is_initial_block_download, median time, warnings
    */
-  getBlockchainInfo: () => Promise<CKBComponents.BlockchainInfo>
+  getBlockchainInfo: () => Promise<BranchComponents.BlockchainInfo>
 
   /* skip Subscription */
 
-  getFeeRateStats: () => Promise<CKBComponents.FeeRateStats | null>
+  getFeeRateStats: () => Promise<BranchComponents.FeeRateStats | null>
 }
 
 export class Base {

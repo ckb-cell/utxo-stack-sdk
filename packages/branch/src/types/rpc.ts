@@ -2,35 +2,35 @@
  * @see https://github.com/nervosnetwork/ckb/blob/develop/util/jsonrpc-types/src/blockchain.rs
  */
 
-import { CKBComponents } from './blockchain'
+import { BranchComponents } from './blockchain'
 
 /* eslint-disable camelcase */
 export module RPC {
-  export type ProposalShortId = CKBComponents.ProposalShortId
-  export type Number = CKBComponents.Number
-  export type UInt32 = CKBComponents.UInt32
-  export type Count = CKBComponents.Count
-  export type DAO = CKBComponents.DAO
-  export type Hash = CKBComponents.Hash
-  export type Hash256 = CKBComponents.Hash256
-  export type Version = CKBComponents.Version
-  export type Capacity = CKBComponents.Capacity
-  export type Witness = CKBComponents.Witness
-  export type Bytes = CKBComponents.Bytes
-  export type Index = CKBComponents.Index
-  export type Since = CKBComponents.Since
-  export type Timestamp = CKBComponents.Timestamp
-  export type BlockNumber = CKBComponents.BlockNumber
+  export type ProposalShortId = BranchComponents.ProposalShortId
+  export type Number = BranchComponents.Number
+  export type UInt32 = BranchComponents.UInt32
+  export type Count = BranchComponents.Count
+  export type DAO = BranchComponents.DAO
+  export type Hash = BranchComponents.Hash
+  export type Hash256 = BranchComponents.Hash256
+  export type Version = BranchComponents.Version
+  export type Capacity = BranchComponents.Capacity
+  export type Witness = BranchComponents.Witness
+  export type Bytes = BranchComponents.Bytes
+  export type Index = BranchComponents.Index
+  export type Since = BranchComponents.Since
+  export type Timestamp = BranchComponents.Timestamp
+  export type BlockNumber = BranchComponents.BlockNumber
   export type EpochInHeader = string
-  export type Difficulty = CKBComponents.Difficulty
-  export type Cycles = CKBComponents.Cycles
-  export type Size = CKBComponents.Size
-  export type RationalU256 = CKBComponents.RationalU256
-  export type ProposalWindow = CKBComponents.ProposalWindow
-  export type EpochNumberWithFraction = CKBComponents.EpochNumberWithFraction
-  export type JsonBytes = CKBComponents.JsonBytes
+  export type Difficulty = BranchComponents.Difficulty
+  export type Cycles = BranchComponents.Cycles
+  export type Size = BranchComponents.Size
+  export type RationalU256 = BranchComponents.RationalU256
+  export type ProposalWindow = BranchComponents.ProposalWindow
+  export type EpochNumberWithFraction = BranchComponents.EpochNumberWithFraction
+  export type JsonBytes = BranchComponents.JsonBytes
 
-  export type ScriptHashType = CKBComponents.ScriptHashType
+  export type ScriptHashType = BranchComponents.ScriptHashType
 
   export type DepType = 'code' | 'dep_group'
 
@@ -99,11 +99,11 @@ export module RPC {
     tx_status:
       | {
           block_hash: Hash256
-          status: CKBComponents.TransactionStatus.Committed
+          status: BranchComponents.TransactionStatus.Committed
         }
       | {
           block_hash: null
-          status: CKBComponents.TransactionStatus.Pending | CKBComponents.TransactionStatus.Proposed
+          status: BranchComponents.TransactionStatus.Pending | BranchComponents.TransactionStatus.Proposed
         }
   }
 
@@ -135,7 +135,7 @@ export module RPC {
     number: BlockNumber
     parent_hash: Hash256
     proposals_hash: Hash256
-    nonce: CKBComponents.Nonce
+    nonce: BranchComponents.Nonce
     timestamp: Timestamp
     transactions_root: Hash256
     extra_hash: Hash256

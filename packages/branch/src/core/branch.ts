@@ -6,11 +6,11 @@ import { generateRawTransaction } from './generateRawTransaction'
 
 import { loadCellsFromIndexer } from './loadCellsFromIndexer'
 import { isMap, signWitnesses } from './signWitnesses'
-import { CKBComponents, DepCellInfo, LoadCellsParams, RawTransactionParams } from '../types'
+import { BranchComponents, DepCellInfo, LoadCellsParams, RawTransactionParams } from '../types'
 
 const filterCellsByInputs = (
   cells: Pick<RawTransactionParams.Cell, 'outPoint' | 'lock'>[],
-  inputs: Pick<CKBComponents.CellInput, 'previousOutput'>[],
+  inputs: Pick<BranchComponents.CellInput, 'previousOutput'>[],
 ) => {
   return inputs.map(input => {
     const outPoint = input.previousOutput
@@ -37,7 +37,7 @@ interface SimpleRawTransactionParams extends RawTransactionParams.Base {
 
 interface ComplexRawTransactionParams extends RawTransactionParams.Base {
   fromAddresses: Address[]
-  receivePairs: { address: Address; capacity: Capacity; type?: CKBComponents.Script | null }[]
+  receivePairs: { address: Address; capacity: Capacity; type?: BranchComponents.Script | null }[]
   cells: Map<LockHash, RawTransactionParams.Cell[]>
 }
 
@@ -48,7 +48,7 @@ export class Branch {
 
   public utils = utils
 
-  private _node: CKBComponents.Node
+  private _node: BranchComponents.Node
 
   public config: {
     secp256k1Dep?: DepCellInfo
@@ -62,7 +62,7 @@ export class Branch {
     this.rpc = new BranchRPC(nodeUrl)
   }
 
-  public setNode(node: URL | CKBComponents.Node): CKBComponents.Node {
+  public setNode(node: URL | BranchComponents.Node): BranchComponents.Node {
     if (typeof node === 'string') {
       this._node.url = node
     } else {
@@ -74,13 +74,13 @@ export class Branch {
     return this._node
   }
 
-  public get node(): CKBComponents.Node {
+  public get node(): BranchComponents.Node {
     return this._node
   }
 
   public generateLockHash = (
     args: string,
-    dep: Omit<CKBComponents.Script, 'args'> | undefined = this.config.secp256k1Dep,
+    dep: Omit<BranchComponents.Script, 'args'> | undefined = this.config.secp256k1Dep,
   ) => {
     if (!dep) {
       throw new ParameterRequiredException('deps')
@@ -102,7 +102,6 @@ export class Branch {
   /**
    * @memberof Core
    * @description The method used to load cells from lumos indexer as shown in the tutorial
-   * @tutorial https://github.com/ckb-js/ckb-sdk-js/blob/develop/packages/ckb-sdk-core/examples/sendTransactionWithLumosCollector.js
    */
   public loadCells = async (
     params: LoadCellsParams.FromIndexer & {
@@ -122,8 +121,8 @@ export class Branch {
   public signTransaction =
     (key: Key | Map<LockHash, Key>) =>
     (
-      transaction: CKBComponents.RawTransactionToSign,
-      cells: Array<{ outPoint: CKBComponents.OutPoint; lock: CKBComponents.Script }> = [],
+      transaction: BranchComponents.RawTransactionToSign,
+      cells: Array<{ outPoint: BranchComponents.OutPoint; lock: BranchComponents.Script }> = [],
     ) => {
       if (!key) throw new ParameterRequiredException('Private key or address object')
       this.#validateTransactionToSign(transaction)
@@ -325,7 +324,7 @@ export class Branch {
     fee,
     cells = [],
   }: {
-    outPoint: CKBComponents.OutPoint
+    outPoint: BranchComponents.OutPoint
     fee: Capacity
     cells?: RawTransactionParams.Cell[]
   }) => {
@@ -372,10 +371,10 @@ export class Branch {
     withdrawOutPoint,
     fee,
   }: {
-    depositOutPoint: CKBComponents.OutPoint
-    withdrawOutPoint: CKBComponents.OutPoint
+    depositOutPoint: BranchComponents.OutPoint
+    withdrawOutPoint: BranchComponents.OutPoint
     fee: Capacity
-  }): Promise<CKBComponents.RawTransactionToSign> => {
+  }): Promise<BranchComponents.RawTransactionToSign> => {
     this.#secp256k1DepsShouldBeReady()
     this.#DAODepsShouldBeReady()
     const { JSBI } = this.utils
@@ -401,7 +400,7 @@ export class Branch {
       throw new Error(`The fee(${targetFee}) is too big that withdraw(${targetCapacity}) is not enough`)
     }
 
-    const outputs: CKBComponents.CellOutput[] = [
+    const outputs: BranchComponents.CellOutput[] = [
       {
         capacity: `0x${JSBI.subtract(targetCapacity, targetFee).toString(16)}`,
         lock: tx.transaction.outputs[+withdrawOutPoint.index].lock,
@@ -436,15 +435,15 @@ export class Branch {
   }
 
   public calculateDaoMaximumWithdraw = async (
-    depositOutPoint: CKBComponents.OutPoint,
-    withdraw: CKBComponents.Hash | CKBComponents.OutPoint,
+    depositOutPoint: BranchComponents.OutPoint,
+    withdraw: BranchComponents.Hash | BranchComponents.OutPoint,
   ): Promise<string> => {
     let tx = await this.rpc.getTransaction(depositOutPoint.txHash)
     if (tx.txStatus.status !== 'committed') throw new Error('Transaction is not committed yet')
     const depositBlockHash = tx.txStatus.blockHash
     let cellOutput = tx.transaction.outputs[+depositOutPoint.index]
     let cellOutputData = tx.transaction.outputsData[+depositOutPoint.index]
-    let withdrawBlockHash: CKBComponents.Hash
+    let withdrawBlockHash: BranchComponents.Hash
     if (typeof withdraw === 'string') {
       withdrawBlockHash = withdraw
     } else {
@@ -473,7 +472,7 @@ export class Branch {
     }
   }
 
-  #validateTransactionToSign = (transaction: CKBComponents.RawTransactionToSign) => {
+  #validateTransactionToSign = (transaction: BranchComponents.RawTransactionToSign) => {
     if (!transaction) throw new ParameterRequiredException('Transaction')
     if (!transaction.witnesses) throw new ParameterRequiredException('Witnesses')
     if (!transaction.outputsData) throw new ParameterRequiredException('OutputsData')
@@ -488,7 +487,7 @@ export class Branch {
     return 'fromAddresses' in params && 'receivePairs' in params
   }
 
-  #setSecp256k1Dep = async (genesisBlock: CKBComponents.Block) => {
+  #setSecp256k1Dep = async (genesisBlock: BranchComponents.Block) => {
     const secp256k1DepTxHash = genesisBlock?.transactions[1].hash
     const typeScript = genesisBlock?.transactions[0]?.outputs[1]?.type!
 
@@ -505,7 +504,7 @@ export class Branch {
     }
   }
 
-  #setDaoDep = (genesisBlock: CKBComponents.Block) => {
+  #setDaoDep = (genesisBlock: BranchComponents.Block) => {
     const daoDepTxHash = genesisBlock?.transactions[0].hash
     const typeScript = genesisBlock?.transactions[0]?.outputs[2]?.type!
     const data = genesisBlock?.transactions[0]?.outputsData[2]

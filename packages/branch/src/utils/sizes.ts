@@ -1,4 +1,4 @@
-import { CKBComponents } from '../types'
+import { BranchComponents } from '../types'
 import { serializeWitnessArgs, serializeTransaction } from './serialization/transaction'
 
 /**
@@ -7,7 +7,7 @@ import { serializeWitnessArgs, serializeTransaction } from './serialization/tran
  * @param {Object} transaction - Raw transaction
  * @returns {String} Virtual size of a transaction in a block
  */
-export const getTransactionSize = (transaction: CKBComponents.RawTransactionToSign) => {
+export const getTransactionSize = (transaction: BranchComponents.RawTransactionToSign) => {
   const tx = {
     ...transaction,
     witnesses: transaction.witnesses.map(wit => (typeof wit === 'string' ? wit : serializeWitnessArgs(wit))),

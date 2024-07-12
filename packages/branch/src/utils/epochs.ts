@@ -1,6 +1,6 @@
 import JSBI from 'jsbi'
 import { assertToBeHexString } from './validators'
-import { CKBComponents } from '../types'
+import { BranchComponents } from '../types'
 
 export interface EpochInfo {
   length: string
@@ -27,7 +27,7 @@ export const serializeEpoch = ({ length, index, number }: EpochInfo): string => 
   return `0x${epochSince.toString(16)}`
 }
 
-export const parseEpoch = (epoch: CKBComponents.EpochInHeader) => ({
+export const parseEpoch = (epoch: BranchComponents.EpochInHeader) => ({
   length: `0x${JSBI.bitwiseAnd(
     JSBI.signedRightShift(JSBI.BigInt(epoch), JSBI.BigInt(40)),
     JSBI.BigInt(0xffff),

@@ -1,4 +1,4 @@
-import { CKBComponents } from '../types'
+import { BranchComponents } from '../types'
 
 /**
  * Encoded string 'ckb-default-hash'
@@ -8,7 +8,7 @@ import { CKBComponents } from '../types'
  */
 export const PERSONAL = new Uint8Array([99, 107, 98, 45, 100, 101, 102, 97, 117, 108, 116, 45, 104, 97, 115, 104])
 
-export const EMPTY_WITNESS_ARGS: CKBComponents.WitnessArgs = {
+export const EMPTY_WITNESS_ARGS: BranchComponents.WitnessArgs = {
   lock: '',
   inputType: '',
   outputType: '',

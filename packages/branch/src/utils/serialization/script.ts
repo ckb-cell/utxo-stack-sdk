@@ -1,10 +1,10 @@
 import { serializeArray, serializeTable, serializeFixVec } from './basic'
 import { ParameterRequiredException } from '../exceptions'
-import { CKBComponents } from '../../types'
+import { BranchComponents } from '../../types'
 
-export const serializeCodeHash = (codeHash: CKBComponents.Hash256) => serializeArray(codeHash)
+export const serializeCodeHash = (codeHash: BranchComponents.Hash256) => serializeArray(codeHash)
 
-export const serializeHashType = (hashType: CKBComponents.ScriptHashType) => {
+export const serializeHashType = (hashType: BranchComponents.ScriptHashType) => {
   if (hashType === 'data') return '0x00'
   if (hashType === 'type') return '0x01'
   if (hashType === 'data1') return '0x02'
@@ -14,7 +14,7 @@ export const serializeHashType = (hashType: CKBComponents.ScriptHashType) => {
 
 export const serializeArgs = (args: string) => serializeFixVec(args)
 
-export const serializeScript = (script: CKBComponents.Script) => {
+export const serializeScript = (script: BranchComponents.Script) => {
   if (!script) throw new ParameterRequiredException('Script')
   const { codeHash = '', hashType, args = '' } = script
   const serializedCodeHash = serializeCodeHash(codeHash)

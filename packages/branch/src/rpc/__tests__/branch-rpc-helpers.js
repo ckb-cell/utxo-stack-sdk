@@ -5,7 +5,7 @@ const NODE_URL = 'http://localhost:8114'
 const { BranchRPC } = require('../../../dist/index')
 
 const rpc = new BranchRPC(NODE_URL)
-describe('ckb-rpc settings and helpers', () => {
+describe('branch-rpc settings and helpers', () => {
   it('set node url', () => {
     const node = {
       url: 'http://localhost:8114',

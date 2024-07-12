@@ -2,12 +2,12 @@ import JSBI from 'jsbi'
 import { calculateTransactionFee } from '../calculateTransactionFee'
 import { getTransactionSize } from '../sizes'
 import { ReconciliationException } from '../exceptions'
-import { CKBComponents } from '../../types'
+import { BranchComponents } from '../../types'
 
 declare namespace Reconciliation {
-  type Cell = { capacity: string; outPoint: CKBComponents.OutPoint }
+  type Cell = { capacity: string; outPoint: BranchComponents.OutPoint }
   interface ExtraInputsParams {
-    tx: CKBComponents.RawTransactionToSign
+    tx: BranchComponents.RawTransactionToSign
     feeRate: string | bigint
     changeThreshold: string | bigint
     cells: Array<Cell>
@@ -15,7 +15,7 @@ declare namespace Reconciliation {
   }
 }
 
-export const extraInputs = (params: Reconciliation.ExtraInputsParams): CKBComponents.RawTransactionToSign => {
+export const extraInputs = (params: Reconciliation.ExtraInputsParams): BranchComponents.RawTransactionToSign => {
   const changeThreshold = JSBI.BigInt(`${params.changeThreshold}`)
 
   const feeRate = JSBI.BigInt(`${params.feeRate}`)
@@ -62,7 +62,7 @@ export const extraInputs = (params: Reconciliation.ExtraInputsParams): CKBCompon
       const change = JSBI.add(changeThreshold, JSBI.subtract(extraCapacity, totalLack))
       const changeOutput = { ...currentChangeOutput, capacity: `0x${change.toString(16)}` }
       const outputs = [...params.tx.outputs.slice(0, -1), changeOutput]
-      const tx: CKBComponents.RawTransactionToSign = { ...params.tx, inputs, outputs }
+      const tx: BranchComponents.RawTransactionToSign = { ...params.tx, inputs, outputs }
       return tx
     }
   }

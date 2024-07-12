@@ -8,11 +8,11 @@ import {
   serializeFixVec,
   serializeOption,
 } from './basic'
-import { CKBComponents } from '../../types'
+import { BranchComponents } from '../../types'
 
-export const serializeVersion = (version: CKBComponents.Version) => toUint32Le(version)
+export const serializeVersion = (version: BranchComponents.Version) => toUint32Le(version)
 
-export const serializeOutPoint = (outPoint: CKBComponents.OutPoint | null) => {
+export const serializeOutPoint = (outPoint: BranchComponents.OutPoint | null) => {
   if (!outPoint) return ''
   const struct = new Map<string, string>([
     ['txHash', outPoint.txHash],
@@ -21,13 +21,13 @@ export const serializeOutPoint = (outPoint: CKBComponents.OutPoint | null) => {
   return serializeStruct(struct)
 }
 
-export const serializeDepType = (type: CKBComponents.DepType) => {
+export const serializeDepType = (type: BranchComponents.DepType) => {
   if (type === 'code') return '0x00'
   if (type === 'depGroup') return '0x01'
   throw new TypeError("Dep type must be either of 'code' or 'depGroup'")
 }
 
-export const serializeCellDep = (dep: CKBComponents.CellDep) => {
+export const serializeCellDep = (dep: BranchComponents.CellDep) => {
   const serializedOutPoint = serializeOutPoint(dep.outPoint)
   const serializedDepType = serializeDepType(dep.depType)
   const struct = new Map<string, string>([
@@ -37,17 +37,17 @@ export const serializeCellDep = (dep: CKBComponents.CellDep) => {
   return serializeStruct(struct)
 }
 
-export const serializeCellDeps = (cellDeps: CKBComponents.CellDep[]) => {
+export const serializeCellDeps = (cellDeps: BranchComponents.CellDep[]) => {
   const serializedCellDepList = cellDeps.map(dep => serializeCellDep(dep))
   return serializeFixVec(serializedCellDepList)
 }
 
-export const serializeHeaderDeps = (deps: CKBComponents.Hash256[]) => {
+export const serializeHeaderDeps = (deps: BranchComponents.Hash256[]) => {
   const serializedHeaderDepList = deps.map(dep => serializeArray(dep))
   return serializeFixVec(serializedHeaderDepList)
 }
 
-export const serializeInput = (input: CKBComponents.CellInput) => {
+export const serializeInput = (input: BranchComponents.CellInput) => {
   const serializedOutPoint = serializeOutPoint(input.previousOutput)
   const serializedSince = toUint64Le(input.since)
   const struct = new Map([
@@ -57,12 +57,12 @@ export const serializeInput = (input: CKBComponents.CellInput) => {
   return serializeStruct(struct)
 }
 
-export const serializeInputs = (inputs: CKBComponents.CellInput[]) => {
+export const serializeInputs = (inputs: BranchComponents.CellInput[]) => {
   const serializedInputList = inputs.map(input => serializeInput(input))
   return serializeFixVec(serializedInputList)
 }
 
-export const serializeOutput = (output: CKBComponents.CellOutput) => {
+export const serializeOutput = (output: BranchComponents.CellOutput) => {
   const serializedCapacity = toUint64Le(output.capacity)
   const serializedLockScript = serializeScript(output.lock)
   const serialiedTypeScript = output.type ? serializeScript(output.type) : ''
@@ -74,17 +74,17 @@ export const serializeOutput = (output: CKBComponents.CellOutput) => {
   return serializeTable(table)
 }
 
-export const serializeOutputs = (outputs: CKBComponents.CellOutput[]) => {
+export const serializeOutputs = (outputs: BranchComponents.CellOutput[]) => {
   const serializedOutputList = outputs.map(output => serializeOutput(output))
   return serializeDynVec(serializedOutputList)
 }
 
-export const serializeOutputsData = (outputsData: CKBComponents.Hash[]) => {
+export const serializeOutputsData = (outputsData: BranchComponents.Hash[]) => {
   const serializedOutputsDatumList = outputsData.map(datum => serializeFixVec(datum))
   return serializeDynVec(serializedOutputsDatumList)
 }
 
-export const serializeWitnessArgs = (witnessArgs: CKBComponents.WitnessArgs) => {
+export const serializeWitnessArgs = (witnessArgs: BranchComponents.WitnessArgs) => {
   const { lock, inputType, outputType } = witnessArgs
   const table = new Map([
     ['lock', serializeOption(lock) === '0x' ? '0x' : serializeFixVec(lock!)],
@@ -94,14 +94,14 @@ export const serializeWitnessArgs = (witnessArgs: CKBComponents.WitnessArgs) => 
   return serializeTable(table)
 }
 
-export const serializeWitnesses = (witnesses: CKBComponents.Witness[]) => {
+export const serializeWitnesses = (witnesses: BranchComponents.Witness[]) => {
   const serializedWitnessList = witnesses.map(witness => serializeFixVec(witness))
   return serializeDynVec(serializedWitnessList)
 }
 
 export const serializeRawTransaction = (
   rawTransaction: Pick<
-    CKBComponents.RawTransaction,
+    BranchComponents.RawTransaction,
     'version' | 'cellDeps' | 'headerDeps' | 'inputs' | 'outputs' | 'outputsData'
   >,
 ) => {
@@ -124,7 +124,7 @@ export const serializeRawTransaction = (
   return serializeTable(table)
 }
 
-export const serializeTransaction = (rawTransaction: CKBComponents.RawTransaction) => {
+export const serializeTransaction = (rawTransaction: BranchComponents.RawTransaction) => {
   const serializedRawTransaction = serializeRawTransaction(rawTransaction)
   const serializedWitnesses = serializeWitnesses(rawTransaction.witnesses || [])
 

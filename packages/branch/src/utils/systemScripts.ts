@@ -1,4 +1,4 @@
-import { CKBComponents } from '../types'
+import { BranchComponents } from '../types'
 
 /**
  * @summary System scripts are the smart contracts built and deployed by the CKB core team.
@@ -9,11 +9,11 @@ import { CKBComponents } from '../types'
  *          -  or other auxiliary infrastructure components.
  * @see https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-system-script-list/0024-ckb-system-script-list.md
  */
-interface SystemScript extends Omit<CKBComponents.Script, 'args'> {
-  depType: CKBComponents.DepType
+interface SystemScript extends Omit<BranchComponents.Script, 'args'> {
+  depType: BranchComponents.DepType
 }
 
-type OutPoints = Record<'mainnetOutPoint' | 'testnetOutPoint', CKBComponents.OutPoint>
+type OutPoints = Record<'mainnetOutPoint' | 'testnetOutPoint', BranchComponents.OutPoint>
 
 /**
  * @memberof System Scripts

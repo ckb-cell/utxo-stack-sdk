@@ -1,4 +1,4 @@
-import { CKBComponents, RawTransactionParams } from '../types'
+import { BranchComponents, RawTransactionParams } from '../types'
 import { scriptToHash, JSBI } from '../utils'
 import { EMPTY_WITNESS_ARGS } from '../utils/const'
 import { assertToBeHexStringOrBigint } from '../utils/validators'
@@ -60,12 +60,12 @@ export const getInputs = ({
   costCapacity,
   unspentCellsMap,
 }: {
-  inputScripts: CKBComponents.Script[]
+  inputScripts: BranchComponents.Script[]
   unspentCellsMap: ReturnType<typeof getKeyAndCellsPairs>['unspentCellsMap']
   safeMode: boolean
   costCapacity: JSBI
 }) => {
-  const inputs: Array<CKBComponents.CellInput & { lockHash: string }> = []
+  const inputs: Array<BranchComponents.CellInput & { lockHash: string }> = []
 
   let sum = JSBI.BigInt(0)
   for (let i = 0; i < inputScripts.length; i++) {
@@ -100,11 +100,11 @@ export const getLeftCells = ({
   inputScripts,
   unspentCellsMap,
 }: {
-  inputScripts: CKBComponents.Script[]
-  usedCells: CKBComponents.CellInput[]
+  inputScripts: BranchComponents.Script[]
+  usedCells: BranchComponents.CellInput[]
   unspentCellsMap: ReturnType<typeof getKeyAndCellsPairs>['unspentCellsMap']
-}): Array<{ capacity: string; outPoint: CKBComponents.OutPoint }> => {
-  const leftCells: Array<{ capacity: string; outPoint: CKBComponents.OutPoint }> = []
+}): Array<{ capacity: string; outPoint: BranchComponents.OutPoint }> => {
+  const leftCells: Array<{ capacity: string; outPoint: BranchComponents.OutPoint }> = []
 
   const isCellUsed = (cell: Pick<RawTransactionParams.Cell, 'outPoint'>) =>
     usedCells.some(
@@ -140,7 +140,7 @@ export const generateRawTransaction = ({
   capacityThreshold = MIN_CELL_CAPACITY,
   changeThreshold = MIN_CELL_CAPACITY,
   ...params
-}: RawTransactionParams.Simple | RawTransactionParams.Complex): CKBComponents.RawTransactionToSign => {
+}: RawTransactionParams.Simple | RawTransactionParams.Complex): BranchComponents.RawTransactionToSign => {
   if (!deps) {
     throw new Error('The dep is not loaded')
   }

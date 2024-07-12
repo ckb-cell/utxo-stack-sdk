@@ -1,4 +1,4 @@
-import { CKBComponents } from '../types/blockchain'
+import { BranchComponents } from '../types/blockchain'
 import { RPC } from '../types/rpc'
 import { JSBI } from '../utils'
 import {
@@ -30,7 +30,7 @@ const formatter = {
     }
     return hash.startsWith('0x') ? hash : `0x${hash}`
   },
-  toNumber: (number: CKBComponents.Number | bigint): RPC.Number => {
+  toNumber: (number: BranchComponents.Number | bigint): RPC.Number => {
     if (typeof number === 'bigint') {
       // @ts-ignore
       return `0x${number.toString(16)}`
@@ -43,7 +43,7 @@ const formatter = {
     }
     return number
   },
-  toScript: (script: CKBComponents.Script): RPC.Script => {
+  toScript: (script: BranchComponents.Script): RPC.Script => {
     const { codeHash, hashType: hash_type, ...rest } = script
     return {
       code_hash: formatter.toHash(codeHash),
@@ -51,7 +51,7 @@ const formatter = {
       ...rest,
     }
   },
-  toOutPoint: (outPoint: CKBComponents.OutPoint | null): RPC.OutPoint | null => {
+  toOutPoint: (outPoint: BranchComponents.OutPoint | null): RPC.OutPoint | null => {
     if (!outPoint) return outPoint
     const { txHash, index, ...rest } = outPoint
     return {
@@ -60,7 +60,7 @@ const formatter = {
       ...rest,
     }
   },
-  toInput: (input: CKBComponents.CellInput): RPC.CellInput => {
+  toInput: (input: BranchComponents.CellInput): RPC.CellInput => {
     if (!input) return input
     const { previousOutput, since, ...rest } = input
     return {
@@ -69,7 +69,7 @@ const formatter = {
       ...rest,
     }
   },
-  toOutput: (output: CKBComponents.CellOutput): RPC.CellOutput => {
+  toOutput: (output: BranchComponents.CellOutput): RPC.CellOutput => {
     if (!output) return output
     const { capacity, lock, type = null, ...rest } = output
     return {
@@ -79,13 +79,13 @@ const formatter = {
       ...rest,
     }
   },
-  toDepType: (type: CKBComponents.DepType) => {
+  toDepType: (type: BranchComponents.DepType) => {
     if (type === 'depGroup') {
       return 'dep_group'
     }
     return type
   },
-  toCellDep: (cellDep: CKBComponents.CellDep): RPC.CellDep => {
+  toCellDep: (cellDep: BranchComponents.CellDep): RPC.CellDep => {
     if (!cellDep) return cellDep
     const { outPoint = null, depType = 'code', ...rest } = cellDep
     return {
@@ -94,7 +94,7 @@ const formatter = {
       ...rest,
     }
   },
-  toRawTransaction: (transaction: CKBComponents.RawTransaction): RPC.RawTransaction => {
+  toRawTransaction: (transaction: BranchComponents.RawTransaction): RPC.RawTransaction => {
     if (!transaction) return transaction
     const {
       version,
@@ -129,7 +129,7 @@ const formatter = {
     return formatter.toNumber(`0x${size.toString(16)}`)
   },
   toReverseOrder: (reverse: boolean = false) => !!reverse,
-  toOutputsValidator: (outputsValidator: CKBComponents.OutputsValidator) => {
+  toOutputsValidator: (outputsValidator: BranchComponents.OutputsValidator) => {
     if (!outputsValidator) return undefined
     const VALIDATORS = ['default', 'passthrough']
     if (VALIDATORS.indexOf(outputsValidator) > -1) {
@@ -140,7 +140,7 @@ const formatter = {
   toBoolean: (value: boolean) => {
     return !!value
   },
-  toTransactionProof: (proof: CKBComponents.TransactionProof): RPC.TransactionProof => {
+  toTransactionProof: (proof: BranchComponents.TransactionProof): RPC.TransactionProof => {
     if (!proof) return proof
     const { blockHash: block_hash, witnessesRoot: witnesses_root, ...rest } = proof
     return {

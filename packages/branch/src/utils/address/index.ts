@@ -16,7 +16,7 @@ import {
   AddressFormatTypeException,
   AddressFormatTypeAndEncodeMethodNotMatchException,
 } from '../exceptions'
-import { CKBComponents } from '../../types'
+import { BranchComponents } from '../../types'
 
 const MAX_BECH32_LIMIT = 1023
 
@@ -52,7 +52,7 @@ enum HashType {
 const payloadToAddress = (payload: Uint8Array, isMainnet = true) =>
   bech32m.encode(isMainnet ? AddressPrefix.Mainnet : AddressPrefix.Testnet, bech32m.toWords(payload), MAX_BECH32_LIMIT)
 
-const scriptToPayload = ({ codeHash, hashType, args }: CKBComponents.Script): Uint8Array => {
+const scriptToPayload = ({ codeHash, hashType, args }: BranchComponents.Script): Uint8Array => {
   if (!args.startsWith('0x')) {
     throw new HexStringWithout0xException(args)
   }
@@ -75,7 +75,7 @@ const scriptToPayload = ({ codeHash, hashType, args }: CKBComponents.Script): Ui
  * @param {booealn} isMainnet
  * @returns {string} address
  */
-export const scriptToAddress = (script: CKBComponents.Script, isMainnet = true) =>
+export const scriptToAddress = (script: BranchComponents.Script, isMainnet = true) =>
   payloadToAddress(scriptToPayload(script), isMainnet)
 
 /**
@@ -88,7 +88,7 @@ export type CodeHashIndex = '0x00' | '0x01' | '0x02'
 export interface AddressOptions {
   prefix?: AddressPrefix
   type?: AddressType
-  codeHashOrCodeHashIndex?: CodeHashIndex | CKBComponents.Hash256
+  codeHashOrCodeHashIndex?: CodeHashIndex | BranchComponents.Hash256
 }
 
 /**
@@ -104,8 +104,8 @@ export interface AddressOptions {
 export const toAddressPayload = (
   args: string | Uint8Array,
   type: AddressType = AddressType.HashIdx,
-  codeHashOrCodeHashIndex?: CodeHashIndex | CKBComponents.Hash256,
-  hashType?: CKBComponents.ScriptHashType,
+  codeHashOrCodeHashIndex?: CodeHashIndex | BranchComponents.Hash256,
+  hashType?: BranchComponents.ScriptHashType,
 ): Uint8Array => {
   if (typeof args === 'string' && !args.startsWith('0x')) {
     throw new HexStringWithout0xException(args)
@@ -188,7 +188,7 @@ export const fullPayloadToAddress = ({
   args: string
   prefix?: AddressPrefix
   type?: AddressType.DataCodeHash | AddressType.TypeCodeHash
-  codeHash: CKBComponents.Hash256
+  codeHash: BranchComponents.Hash256
 }) => bech32Address(args, { prefix, type, codeHashOrCodeHashIndex: codeHash })
 
 export const pubkeyToAddress = (pubkey: Uint8Array | string, options: AddressOptions = {}) => {
@@ -301,13 +301,13 @@ export const parseAddress: ParseAddress = (address: string, encode: 'binary' | '
   return encode === 'binary' ? payload : bytesToHex(payload)
 }
 
-export const addressToScript = (address: string): CKBComponents.Script => {
+export const addressToScript = (address: string): BranchComponents.Script => {
   const payload = parseAddress(address)
   const type = payload[0]
 
   switch (type) {
     case +AddressType.FullVersion: {
-      const HASH_TYPE: Record<string, CKBComponents.ScriptHashType> = {
+      const HASH_TYPE: Record<string, BranchComponents.ScriptHashType> = {
         '00': 'data',
         '01': 'type',
         '02': 'data1',

@@ -1,14 +1,14 @@
-import { CKBComponents } from './blockchain'
+import { BranchComponents } from './blockchain'
 
 export interface DepCellInfo {
-  hashType: CKBComponents.ScriptHashType
-  codeHash: CKBComponents.Hash256
-  typeHash?: CKBComponents.Hash256
-  outPoint: CKBComponents.OutPoint
-  depType: CKBComponents.DepType
+  hashType: BranchComponents.ScriptHashType
+  codeHash: BranchComponents.Hash256
+  typeHash?: BranchComponents.Hash256
+  outPoint: BranchComponents.OutPoint
+  depType: BranchComponents.DepType
 }
 
-export type StructuredWitness = CKBComponents.WitnessArgs | CKBComponents.Witness
+export type StructuredWitness = BranchComponents.WitnessArgs | BranchComponents.Witness
 
 export namespace LoadCellsParams {
   interface Base {
@@ -17,14 +17,14 @@ export namespace LoadCellsParams {
   }
 
   export interface Normal extends Base {
-    lockHash: CKBComponents.Hash
+    lockHash: BranchComponents.Hash
     start?: string | bigint
     end?: string | bigint
     STEP?: string | bigint
   }
 
   export interface FromIndexer extends Base {
-    lock: CKBComponents.Script
+    lock: BranchComponents.Script
     indexer: any
     CellCollector: any
   }
@@ -35,22 +35,22 @@ export namespace RawTransactionParams {
   export type Capacity = string | bigint
   export type Cell = {
     data: string
-    lock: CKBComponents.Script
-    type?: CKBComponents.Script
-    capacity: CKBComponents.Capacity
-    outPoint: CKBComponents.OutPoint
+    lock: BranchComponents.Script
+    type?: BranchComponents.Script
+    capacity: BranchComponents.Capacity
+    outPoint: BranchComponents.OutPoint
   }
   export type Fee =
     | Capacity
     | {
         feeRate: Capacity
         reconciler: (params: {
-          tx: CKBComponents.RawTransactionToSign
+          tx: BranchComponents.RawTransactionToSign
           feeRate: Capacity
           changeThreshold: Capacity
-          cells: Array<{ capacity: string; outPoint: CKBComponents.OutPoint }>
+          cells: Array<{ capacity: string; outPoint: BranchComponents.OutPoint }>
           extraCount: number
-        }) => CKBComponents.RawTransactionToSign
+        }) => BranchComponents.RawTransactionToSign
       }
   export interface Base {
     fee?: Fee
@@ -58,26 +58,26 @@ export namespace RawTransactionParams {
     deps: DepCellInfo | DepCellInfo[]
     capacityThreshold?: Capacity
     changeThreshold?: Capacity
-    changeLockScript?: CKBComponents.Script
-    witnesses?: Array<CKBComponents.WitnessArgs | CKBComponents.Witness>
+    changeLockScript?: BranchComponents.Script
+    witnesses?: Array<BranchComponents.WitnessArgs | BranchComponents.Witness>
     outputsData?: Array<string>
   }
 
   export interface Simple extends Base {
-    inputScript: CKBComponents.Script
-    outputScript: CKBComponents.Script
+    inputScript: BranchComponents.Script
+    outputScript: BranchComponents.Script
     capacity: Capacity
     cells?: Cell[]
   }
 
   export interface Output {
     capacity: string | bigint
-    lock: CKBComponents.Script
-    type?: CKBComponents.Script | null
+    lock: BranchComponents.Script
+    type?: BranchComponents.Script | null
   }
 
   export interface Complex extends Base {
-    inputScripts: CKBComponents.Script[]
+    inputScripts: BranchComponents.Script[]
     outputs: Output[]
     cells?: Map<LockHash, Cell[]>
   }

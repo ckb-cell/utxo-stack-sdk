@@ -1,4 +1,4 @@
-import { CKBComponents } from '../types'
+import { BranchComponents } from '../types'
 import { blake2b, PERSONAL, hexToBytes } from '../utils'
 
 export type MultisigConfig = {
@@ -18,7 +18,7 @@ export function isMultisigConfig(config: any): config is MultisigConfig {
   )
 }
 
-export type Signatures = Record<CKBComponents.Hash, CKBComponents.Bytes[]>
+export type Signatures = Record<BranchComponents.Hash, BranchComponents.Bytes[]>
 
 export enum SignStatus {
   Signed = 'Signed',
@@ -58,7 +58,7 @@ export const hashMultisig = (config: MultisigConfig) => {
   return `0x${blake2bHash.digest('hex')}`.slice(0, 42)
 }
 
-export const getMultisigStatus = (config: MultisigConfig, signatures: CKBComponents.Bytes[] = []) => {
+export const getMultisigStatus = (config: MultisigConfig, signatures: BranchComponents.Bytes[] = []) => {
   let signedForM = 0
   let signedForR = 0
   for (let i = 0; i < config.n; i++) {

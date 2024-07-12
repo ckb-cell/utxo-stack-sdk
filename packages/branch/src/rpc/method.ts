@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { IdNotMatchException, ResponseException } from './exceptions'
-import { CKBComponents } from '../types'
+import { BranchComponents } from '../types'
 
 export class Method {
   #name: string
@@ -9,16 +9,16 @@ export class Method {
     return this.#name
   }
 
-  #options: CKBComponents.Method = {
+  #options: BranchComponents.Method = {
     name: '',
     method: '',
     paramsFormatters: [],
     resultFormatters: undefined,
   }
 
-  #node: CKBComponents.Node
+  #node: BranchComponents.Node
 
-  constructor(node: CKBComponents.Node, options: CKBComponents.Method) {
+  constructor(node: BranchComponents.Node, options: BranchComponents.Method) {
     this.#node = node
     this.#options = options
     this.#name = options.name

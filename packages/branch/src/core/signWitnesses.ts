@@ -3,11 +3,11 @@ import { ParameterRequiredException } from '../utils/exceptions'
 import { SignatureProvider, signWitnessGroup } from './signWitnessGroup'
 import { groupScripts } from './groupScripts'
 import { getMultisigStatus, isMultisigConfig, MultisigConfig, serializeMultisigConfig, SignStatus } from './multisig'
-import { CKBComponents, StructuredWitness } from '../types'
+import { BranchComponents, StructuredWitness } from '../types'
 
 type LockHash = string
 type TransactionHash = string
-type CachedLock = { lock: CKBComponents.Script }
+type CachedLock = { lock: BranchComponents.Script }
 export type MultisigOption = {
   sk: SignatureProvider
   blake160: string
@@ -99,7 +99,7 @@ export const signWitnesses: SignWitnesses =
           if (typeof firstWitness !== 'object') {
             throw new Error('The first witness in the group should be type of WitnessArgs')
           }
-          let lockAfterSign = (witnessIncludeSignature as CKBComponents.WitnessArgs).lock
+          let lockAfterSign = (witnessIncludeSignature as BranchComponents.WitnessArgs).lock
           if (firstWitness.lock) {
             lockAfterSign = firstWitness.lock + lockAfterSign?.slice(2)
           } else {

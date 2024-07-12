@@ -1,9 +1,9 @@
-import { CKBComponents } from '../types'
+import { BranchComponents } from '../types'
 import { scriptToHash } from '../utils'
 
 type LockHash = string
 type Index = number
-type Cell = { lock: CKBComponents.Script }
+type Cell = { lock: BranchComponents.Script }
 
 export const groupScripts = (inputCells: Cell[]) => {
   const groups = new Map<LockHash, Index[]>()

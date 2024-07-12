@@ -3,13 +3,13 @@ import Base from './base'
 import paramsFormatter from './paramsFormatter'
 import * as resultFormatter from './resultFormatter'
 import { MethodInBatchNotFoundException, PayloadInBatchException, IdNotMatchedInBatchException } from './exceptions'
-import { CKBComponents } from '../types'
+import { BranchComponents } from '../types'
 import { Method } from './method'
 
 export { Method }
 
 export class BranchRPC extends Base {
-  #node: CKBComponents.Node = {
+  #node: BranchComponents.Node = {
     url: '',
   }
 
@@ -44,12 +44,12 @@ export class BranchRPC extends Base {
     })
   }
 
-  public setNode(node: CKBComponents.Node): CKBComponents.Node {
+  public setNode(node: BranchComponents.Node): BranchComponents.Node {
     Object.assign(this.node, node)
     return this.node
   }
 
-  public addMethod = (options: CKBComponents.Method) => {
+  public addMethod = (options: BranchComponents.Method) => {
     const method = new Method(this.node, options)
 
     Object.defineProperty(this, options.name, {

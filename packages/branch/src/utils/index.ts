@@ -8,7 +8,7 @@ import { serializeScript } from './serialization'
 import { cellOccupied } from './occupiedCapacity'
 import { serializeRawTransaction } from './serialization/transaction'
 import { PERSONAL } from './const'
-import { CKBComponents } from '../types'
+import { BranchComponents } from '../types'
 
 export * from './address'
 export * from './serialization'
@@ -26,7 +26,7 @@ export * from './validators'
 export * from './exceptions'
 export { JSBI }
 
-export const scriptToHash = (script: CKBComponents.Script) => {
+export const scriptToHash = (script: BranchComponents.Script) => {
   if (!script) throw new ParameterRequiredException('Script')
   const serializedScript = serializeScript(script)
   const s = blake2b(32, null, null, PERSONAL)
@@ -35,7 +35,7 @@ export const scriptToHash = (script: CKBComponents.Script) => {
   return `0x${digest}` as string
 }
 
-export const rawTransactionToHash = (rawTransaction: Omit<CKBComponents.RawTransaction, 'witnesses'>) => {
+export const rawTransactionToHash = (rawTransaction: Omit<BranchComponents.RawTransaction, 'witnesses'>) => {
   if (!rawTransaction) throw new ParameterRequiredException('Raw transaction')
   const serializedRawTransaction = serializeRawTransaction(rawTransaction)
   const s = blake2b(32, null, null, PERSONAL)
@@ -52,7 +52,7 @@ export const privateKeyToPublicKey = (privateKey: string) => {
 export const privateKeyToAddress = (privateKey: string, options: AddressOptions) =>
   pubkeyToAddress(privateKeyToPublicKey(privateKey), options)
 
-export const extractDAOData = (dao: CKBComponents.DAO) => {
+export const extractDAOData = (dao: BranchComponents.DAO) => {
   if (!dao.startsWith('0x')) {
     throw new HexStringWithout0xException(dao)
   }
@@ -66,10 +66,10 @@ export const extractDAOData = (dao: CKBComponents.DAO) => {
 }
 
 export const calculateMaximumWithdraw = (
-  outputCell: CKBComponents.CellOutput,
-  outputDataCapacity: CKBComponents.Bytes,
-  depositDAO: CKBComponents.DAO,
-  withdrawDAO: CKBComponents.DAO,
+  outputCell: BranchComponents.CellOutput,
+  outputDataCapacity: BranchComponents.Bytes,
+  depositDAO: BranchComponents.DAO,
+  withdrawDAO: BranchComponents.DAO,
 ) => {
   const depositCellSerialized = cellOccupied(outputCell) + outputDataCapacity.slice(2).length / 2
   const occupiedCapacity = JSBI.asUintN(128, JSBI.multiply(JSBI.BigInt(100000000), JSBI.BigInt(depositCellSerialized)))

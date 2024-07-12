@@ -2,7 +2,7 @@
  * @see https://github.com/nervosnetwork/ckb/blob/develop/protocol/src/protocol.fbs for more information
  */
 
-export namespace CKBComponents {
+export namespace BranchComponents {
   export type DAO = string
   export type Hash = string
   export type Number = string

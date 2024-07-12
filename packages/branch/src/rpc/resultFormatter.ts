@@ -1,13 +1,13 @@
-import { CKBComponents, RPC } from '../types'
+import { BranchComponents, RPC } from '../types'
 
 const isTxPoolIds = (rawTxPool: RPC.RawTxPool): rawTxPool is RPC.TxPoolIds => {
   return Array.isArray(rawTxPool.pending)
 }
 
 /* eslint-disable camelcase */
-const toNumber = (number: RPC.BlockNumber): CKBComponents.BlockNumber => number.toString()
-const toHash = (hash: RPC.Hash256): CKBComponents.Hash256 => hash
-const toHeader = (header: RPC.Header): CKBComponents.BlockHeader => {
+const toNumber = (number: RPC.BlockNumber): BranchComponents.BlockNumber => number.toString()
+const toHash = (hash: RPC.Hash256): BranchComponents.Hash256 => hash
+const toHeader = (header: RPC.Header): BranchComponents.BlockHeader => {
   if (!header) return header
   const {
     compact_target: compactTarget,
@@ -26,7 +26,7 @@ const toHeader = (header: RPC.Header): CKBComponents.BlockHeader => {
     ...rest,
   }
 }
-const toScript = (script: RPC.Script): CKBComponents.Script => {
+const toScript = (script: RPC.Script): BranchComponents.Script => {
   if (!script) return script
   const { code_hash: codeHash, hash_type: hashType, ...rest } = script
   return {
@@ -35,7 +35,7 @@ const toScript = (script: RPC.Script): CKBComponents.Script => {
     ...rest,
   }
 }
-const toInput = (input: RPC.CellInput): CKBComponents.CellInput => {
+const toInput = (input: RPC.CellInput): BranchComponents.CellInput => {
   if (!input) return input
   const { previous_output: previousOutput, ...rest } = input
   return {
@@ -43,7 +43,7 @@ const toInput = (input: RPC.CellInput): CKBComponents.CellInput => {
     ...rest,
   }
 }
-const toOutput = (output: RPC.CellOutput): CKBComponents.CellOutput => {
+const toOutput = (output: RPC.CellOutput): BranchComponents.CellOutput => {
   if (!output) return output
   const { lock, type, ...rest } = output
   return {
@@ -52,7 +52,7 @@ const toOutput = (output: RPC.CellOutput): CKBComponents.CellOutput => {
     ...rest,
   }
 }
-const toOutPoint = (outPoint: RPC.OutPoint | null): CKBComponents.OutPoint | null => {
+const toOutPoint = (outPoint: RPC.OutPoint | null): BranchComponents.OutPoint | null => {
   if (!outPoint) return outPoint
   const { tx_hash: txHash, ...rest } = outPoint
   return {
@@ -67,7 +67,7 @@ const toDepType = (type: RPC.DepType) => {
   return type
 }
 
-const toCellDep = (cellDep: RPC.CellDep): CKBComponents.CellDep => {
+const toCellDep = (cellDep: RPC.CellDep): BranchComponents.CellDep => {
   if (!cellDep) return cellDep
   const { out_point: outPoint = null, dep_type = 'code', ...rest } = cellDep
   return {
@@ -76,8 +76,8 @@ const toCellDep = (cellDep: RPC.CellDep): CKBComponents.CellDep => {
     ...rest,
   }
 }
-function toTransaction(tx: RPC.RawTransaction): CKBComponents.RawTransaction
-function toTransaction(tx: RPC.Transaction): CKBComponents.Transaction
+function toTransaction(tx: RPC.RawTransaction): BranchComponents.RawTransaction
+function toTransaction(tx: RPC.Transaction): BranchComponents.Transaction
 function toTransaction(tx: RPC.RawTransaction | RPC.Transaction): any {
   if (!tx) return tx
   const {
@@ -97,7 +97,7 @@ function toTransaction(tx: RPC.RawTransaction | RPC.Transaction): any {
     ...rest,
   }
 }
-const toUncleBlock = (uncleBlock: RPC.UncleBlock): CKBComponents.UncleBlock => {
+const toUncleBlock = (uncleBlock: RPC.UncleBlock): BranchComponents.UncleBlock => {
   if (!uncleBlock) return uncleBlock
   const { header, ...rest } = uncleBlock
   return {
@@ -106,7 +106,7 @@ const toUncleBlock = (uncleBlock: RPC.UncleBlock): CKBComponents.UncleBlock => {
   }
 }
 
-const toBlock = (block: RPC.Block): CKBComponents.Block => {
+const toBlock = (block: RPC.Block): BranchComponents.Block => {
   if (!block) return block
   const { header, uncles = [], transactions = [], ...rest } = block
   return {
@@ -116,7 +116,7 @@ const toBlock = (block: RPC.Block): CKBComponents.Block => {
     ...rest,
   }
 }
-const toAlertMessage = (alertMessage: RPC.AlertMessage): CKBComponents.AlertMessage => {
+const toAlertMessage = (alertMessage: RPC.AlertMessage): BranchComponents.AlertMessage => {
   if (!alertMessage) return alertMessage
   const { notice_until: noticeUntil, ...rest } = alertMessage
   return {
@@ -124,7 +124,7 @@ const toAlertMessage = (alertMessage: RPC.AlertMessage): CKBComponents.AlertMess
     ...rest,
   }
 }
-const toBlockchainInfo = (info: RPC.BlockchainInfo): CKBComponents.BlockchainInfo => {
+const toBlockchainInfo = (info: RPC.BlockchainInfo): BranchComponents.BlockchainInfo => {
   if (!info) return info
   const { is_initial_block_download: isInitialBlockDownload, median_time: medianTime, alerts, ...rest } = info
   return {
@@ -134,7 +134,7 @@ const toBlockchainInfo = (info: RPC.BlockchainInfo): CKBComponents.BlockchainInf
     ...rest,
   }
 }
-const toLocalNodeInfo = (info: RPC.LocalNodeInfo): CKBComponents.LocalNodeInfo => {
+const toLocalNodeInfo = (info: RPC.LocalNodeInfo): BranchComponents.LocalNodeInfo => {
   if (!info) return info
   const { node_id: nodeId, protocols, ...rest } = info
   return {
@@ -143,7 +143,7 @@ const toLocalNodeInfo = (info: RPC.LocalNodeInfo): CKBComponents.LocalNodeInfo =
     ...rest,
   }
 }
-const toRemoteNodeInfo = (info: RPC.RemoteNodeInfo): CKBComponents.RemoteNodeInfo => {
+const toRemoteNodeInfo = (info: RPC.RemoteNodeInfo): BranchComponents.RemoteNodeInfo => {
   if (!info) return info
   const {
     node_id: nodeId,
@@ -170,7 +170,7 @@ const toRemoteNodeInfo = (info: RPC.RemoteNodeInfo): CKBComponents.RemoteNodeInf
     ...rest,
   }
 }
-const toTxPoolInfo = (info: RPC.TxPoolInfo): CKBComponents.TxPoolInfo => {
+const toTxPoolInfo = (info: RPC.TxPoolInfo): BranchComponents.TxPoolInfo => {
   if (!info) return info
   const {
     last_txs_updated_at: lastTxsUpdatedAt,
@@ -191,11 +191,11 @@ const toTxPoolInfo = (info: RPC.TxPoolInfo): CKBComponents.TxPoolInfo => {
     ...rest,
   }
 }
-const toPeers = (nodes: RPC.RemoteNodeInfo[]): CKBComponents.RemoteNodeInfo[] => {
+const toPeers = (nodes: RPC.RemoteNodeInfo[]): BranchComponents.RemoteNodeInfo[] => {
   if (!Array.isArray(nodes)) return []
   return nodes.map(toRemoteNodeInfo)
 }
-const toCell = (cell: RPC.Cell): CKBComponents.Cell => {
+const toCell = (cell: RPC.Cell): BranchComponents.Cell => {
   if (!cell) return cell
   const { lock, type, ...rest } = cell
   return {
@@ -204,7 +204,7 @@ const toCell = (cell: RPC.Cell): CKBComponents.Cell => {
     ...rest,
   }
 }
-const toLiveCell = (liveCell: RPC.LiveCell): CKBComponents.LiveCell => {
+const toLiveCell = (liveCell: RPC.LiveCell): BranchComponents.LiveCell => {
   if (!liveCell) return liveCell
   const { data, output, ...rest } = liveCell
   return {
@@ -216,7 +216,7 @@ const toLiveCell = (liveCell: RPC.LiveCell): CKBComponents.LiveCell => {
 const toLiveCellWithStatus = (cellWithStatus: {
   cell: RPC.LiveCell
   status: string
-}): { cell: CKBComponents.LiveCell; status: string } => {
+}): { cell: BranchComponents.LiveCell; status: string } => {
   if (!cellWithStatus) return cellWithStatus
   const { cell, ...rest } = cellWithStatus
   return {
@@ -224,7 +224,7 @@ const toLiveCellWithStatus = (cellWithStatus: {
     ...rest,
   }
 }
-const toCells = (cells: RPC.Cell[]): CKBComponents.Cell[] => {
+const toCells = (cells: RPC.Cell[]): BranchComponents.Cell[] => {
   if (!Array.isArray(cells)) return []
   return cells.map(toCell)
 }
@@ -239,7 +239,7 @@ const toCellIncludingOutPoint = (cell: RPC.CellIncludingOutPoint) => {
     ...rest,
   }
 }
-const toCellsIncludingOutPoint = (cells: RPC.CellIncludingOutPoint[]): CKBComponents.CellIncludingOutPoint[] => {
+const toCellsIncludingOutPoint = (cells: RPC.CellIncludingOutPoint[]): BranchComponents.CellIncludingOutPoint[] => {
   if (!Array.isArray(cells)) return []
   return cells.map(toCellIncludingOutPoint)
 }
@@ -259,7 +259,7 @@ const toTransactionWithStatus = (txWithStatus: RPC.TransactionWithStatus) => {
     ...rest,
   }
 }
-const toEpoch = (epoch: RPC.Epoch): CKBComponents.Epoch => {
+const toEpoch = (epoch: RPC.Epoch): BranchComponents.Epoch => {
   if (!epoch) return epoch
   const { start_number: startNumber, compact_target: compactTarget, ...rest } = epoch
   return {
@@ -268,7 +268,7 @@ const toEpoch = (epoch: RPC.Epoch): CKBComponents.Epoch => {
     ...rest,
   }
 }
-const toTransactionPoint = (transactionPoint: RPC.TransactionPoint): CKBComponents.TransactionPoint => {
+const toTransactionPoint = (transactionPoint: RPC.TransactionPoint): BranchComponents.TransactionPoint => {
   if (!transactionPoint) return transactionPoint
   const { block_number: blockNumber, tx_hash: txHash, ...rest } = transactionPoint
   return {
@@ -277,14 +277,14 @@ const toTransactionPoint = (transactionPoint: RPC.TransactionPoint): CKBComponen
     ...rest,
   }
 }
-const toTransactionsByLockHash = (transactions: RPC.TransactionsByLockHash): CKBComponents.TransactionsByLockHash => {
+const toTransactionsByLockHash = (transactions: RPC.TransactionsByLockHash): BranchComponents.TransactionsByLockHash => {
   if (!transactions) return transactions
   return transactions.map(tx => ({
     consumedBy: tx.consumed_by ? toTransactionPoint(tx.consumed_by) : tx.consumed_by,
     createdBy: toTransactionPoint(tx.created_by),
   }))
 }
-const toLiveCellsByLockHash = (cells: RPC.LiveCellsByLockHash): CKBComponents.LiveCellsByLockHash => {
+const toLiveCellsByLockHash = (cells: RPC.LiveCellsByLockHash): BranchComponents.LiveCellsByLockHash => {
   if (!cells) return cells
   return cells.map(cell => ({
     cellOutput: toCell(cell.cell_output),
@@ -293,7 +293,7 @@ const toLiveCellsByLockHash = (cells: RPC.LiveCellsByLockHash): CKBComponents.Li
     outputDataLen: cell.output_data_len,
   }))
 }
-const toLockHashIndexState = (index: RPC.LockHashIndexState): CKBComponents.LockHashIndexState => {
+const toLockHashIndexState = (index: RPC.LockHashIndexState): BranchComponents.LockHashIndexState => {
   if (!index) return index
   const { block_hash: blockHash, block_number: blockNumber, lock_hash: lockHash, ...rest } = index
   return {
@@ -303,11 +303,11 @@ const toLockHashIndexState = (index: RPC.LockHashIndexState): CKBComponents.Lock
     ...rest,
   }
 }
-const toLockHashIndexStates = (states: RPC.LockHashIndexStates): CKBComponents.LockHashIndexStates => {
+const toLockHashIndexStates = (states: RPC.LockHashIndexStates): BranchComponents.LockHashIndexStates => {
   if (!states) return states
   return states.map(toLockHashIndexState)
 }
-const toBannedAddress = (bannedAddress: RPC.BannedAddress): CKBComponents.BannedAddress => {
+const toBannedAddress = (bannedAddress: RPC.BannedAddress): BranchComponents.BannedAddress => {
   if (!bannedAddress) return bannedAddress
   const { ban_reason: banReason, ban_until: banUntil, created_at: createdAt, ...rest } = bannedAddress
   return {
@@ -317,13 +317,13 @@ const toBannedAddress = (bannedAddress: RPC.BannedAddress): CKBComponents.Banned
     ...rest,
   }
 }
-const toBannedAddresses = (bannedAddresses: RPC.BannedAddresses): CKBComponents.BannedAddresses => {
+const toBannedAddresses = (bannedAddresses: RPC.BannedAddresses): BranchComponents.BannedAddresses => {
   if (!bannedAddresses) return bannedAddresses
   return bannedAddresses.map(banAddr => toBannedAddress(banAddr))
 }
 const toCellbaseOutputCapacityDetails = (
   details: RPC.CellbaseOutputCapacityDetails,
-): CKBComponents.CellbaseOutputCapacityDetails => {
+): BranchComponents.CellbaseOutputCapacityDetails => {
   if (!details) return details
   const { proposal_reward: proposalReward, tx_fee: txFee, ...rest } = details
   return {
@@ -333,7 +333,7 @@ const toCellbaseOutputCapacityDetails = (
   }
 }
 
-const toFeeRate = (feeRateObj: RPC.FeeRate): CKBComponents.FeeRate => {
+const toFeeRate = (feeRateObj: RPC.FeeRate): BranchComponents.FeeRate => {
   if (!feeRateObj) {
     return feeRateObj
   }
@@ -343,7 +343,7 @@ const toFeeRate = (feeRateObj: RPC.FeeRate): CKBComponents.FeeRate => {
     ...rest,
   }
 }
-const toCapacityByLockHash = (capacityByLockHash: RPC.CapacityByLockHash): CKBComponents.CapacityByLockHash => {
+const toCapacityByLockHash = (capacityByLockHash: RPC.CapacityByLockHash): BranchComponents.CapacityByLockHash => {
   if (!capacityByLockHash) {
     return capacityByLockHash
   }
@@ -355,7 +355,7 @@ const toCapacityByLockHash = (capacityByLockHash: RPC.CapacityByLockHash): CKBCo
     ...rest,
   }
 }
-const toBlockEconomicState = (blockEconomicState: RPC.BlockEconomicState): CKBComponents.BlockEconomicState => {
+const toBlockEconomicState = (blockEconomicState: RPC.BlockEconomicState): BranchComponents.BlockEconomicState => {
   if (!blockEconomicState) {
     return blockEconomicState
   }
@@ -367,7 +367,7 @@ const toBlockEconomicState = (blockEconomicState: RPC.BlockEconomicState): CKBCo
     ...rest,
   }
 }
-const toSyncState = (state: RPC.SyncState): CKBComponents.SyncState => {
+const toSyncState = (state: RPC.SyncState): BranchComponents.SyncState => {
   if (!state) {
     return state
   }
@@ -382,7 +382,7 @@ const toSyncState = (state: RPC.SyncState): CKBComponents.SyncState => {
     orphanBlocksCount: state.orphan_blocks_count,
   }
 }
-const toTransactionProof = (proof: RPC.TransactionProof): CKBComponents.TransactionProof => {
+const toTransactionProof = (proof: RPC.TransactionProof): BranchComponents.TransactionProof => {
   if (!proof) {
     return proof
   }
@@ -393,7 +393,7 @@ const toTransactionProof = (proof: RPC.TransactionProof): CKBComponents.Transact
     ...rest,
   }
 }
-const toConsensus = (consensus: RPC.Consensus): CKBComponents.Consensus => {
+const toConsensus = (consensus: RPC.Consensus): BranchComponents.Consensus => {
   if (!consensus) return consensus
   return {
     blockVersion: consensus.block_version,
@@ -424,7 +424,7 @@ const toConsensus = (consensus: RPC.Consensus): CKBComponents.Consensus => {
   }
 }
 
-const toRawTxPool = (rawTxPool: RPC.RawTxPool): CKBComponents.RawTxPool => {
+const toRawTxPool = (rawTxPool: RPC.RawTxPool): BranchComponents.RawTxPool => {
   if (!rawTxPool) return rawTxPool
 
   if (isTxPoolIds(rawTxPool)) {
@@ -436,14 +436,14 @@ const toRawTxPool = (rawTxPool: RPC.RawTxPool): CKBComponents.RawTxPool => {
     ancestors_cycles: ancestorsCycles,
     ancestors_size: ancestorsSize,
     ...rest
-  }: RPC.TxVerbosity): CKBComponents.TxVerbosity => ({
+  }: RPC.TxVerbosity): BranchComponents.TxVerbosity => ({
     ancestorsCount,
     ancestorsCycles,
     ancestorsSize,
     ...rest,
   })
-  const proposed: Record<CKBComponents.Hash256, CKBComponents.TxVerbosity> = {}
-  const pending: Record<CKBComponents.Hash256, CKBComponents.TxVerbosity> = {}
+  const proposed: Record<BranchComponents.Hash256, BranchComponents.TxVerbosity> = {}
+  const pending: Record<BranchComponents.Hash256, BranchComponents.TxVerbosity> = {}
 
   Object.keys(rawTxPool.proposed).forEach(hash => {
     proposed[hash] = toTxVerbosity(rawTxPool.proposed[hash])
