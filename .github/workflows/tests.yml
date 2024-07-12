@@ -39,18 +39,12 @@ jobs:
 
       - name: Install Deps
         if: ${{ steps.is_skip.outputs.IS_SKIP != 'true' }}
-        run: npm install
+        run: pnpm install
 
       - name: Compile
         if: ${{ steps.is_skip.outputs.IS_SKIP != 'true' }}
-        run: npx lerna run tsc
+        run: pnpm build
 
       - name: Test
         if: ${{ steps.is_skip.outputs.IS_SKIP != 'true' }}
-        run: yarn run test
-
-      - name: Upload codecov
-        if: matrix.os == 'macos-latest' && matrix.node == '18'
-        uses: codecov/codecov-action@v3
-        with:
-          fail_ci_if_error: true
+        run: pnpm test
