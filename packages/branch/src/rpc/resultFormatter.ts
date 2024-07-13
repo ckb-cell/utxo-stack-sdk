@@ -277,7 +277,9 @@ const toTransactionPoint = (transactionPoint: RPC.TransactionPoint): BranchCompo
     ...rest,
   }
 }
-const toTransactionsByLockHash = (transactions: RPC.TransactionsByLockHash): BranchComponents.TransactionsByLockHash => {
+const toTransactionsByLockHash = (
+  transactions: RPC.TransactionsByLockHash,
+): BranchComponents.TransactionsByLockHash => {
   if (!transactions) return transactions
   return transactions.map(tx => ({
     consumedBy: tx.consumed_by ? toTransactionPoint(tx.consumed_by) : tx.consumed_by,

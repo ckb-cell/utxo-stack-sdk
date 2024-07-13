@@ -24,6 +24,7 @@ export * from './const'
 export * from './ecpair'
 export * from './validators'
 export * from './exceptions'
+export * from './caseParser'
 export { JSBI }
 
 export const scriptToHash = (script: BranchComponents.Script) => {
