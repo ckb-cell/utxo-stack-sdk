@@ -1,13 +1,13 @@
-import { serializeWitnessArgs } from '../utils'
+import { scriptToHash, serializeWitnessArgs } from '../utils'
 import { ParameterRequiredException } from '../utils/exceptions'
 import { SignatureProvider, signWitnessGroup } from './signWitnessGroup'
-import { groupScripts } from './groupScripts'
 import { getMultisigStatus, isMultisigConfig, MultisigConfig, serializeMultisigConfig, SignStatus } from './multisig'
 import { BranchComponents, StructuredWitness } from '../types'
 
 type LockHash = string
 type TransactionHash = string
-type CachedLock = { lock: BranchComponents.Script }
+type Index = number
+type Cell = { lock: BranchComponents.Script }
 export type MultisigOption = {
   sk: SignatureProvider
   blake160: string
@@ -25,7 +25,7 @@ export interface SignWitnesses {
   ): (params: {
     transactionHash: TransactionHash
     witnesses: StructuredWitness[]
-    inputCells: CachedLock[]
+    inputCells: Cell[]
     skipMissingKeys: boolean
   }) => StructuredWitness[]
   (
@@ -33,7 +33,7 @@ export interface SignWitnesses {
   ): (params: {
     transactionHash: TransactionHash
     witnesses: StructuredWitness[]
-    inputCells?: CachedLock[]
+    inputCells?: Cell[]
     skipMissingKeys?: boolean
   }) => StructuredWitness[]
 }
@@ -57,6 +57,16 @@ function isMultisigOption(params: any): params is MultisigOption {
   throw new Error('Multisig options miss some property')
 }
 
+const groupScripts = (inputCells: Cell[]) => {
+  const groups = new Map<LockHash, Index[]>()
+  inputCells.forEach((cell, i) => {
+    const lockHash = scriptToHash(cell.lock)
+    const group = groups.get(lockHash) || []
+    groups.set(lockHash, [...group, i])
+  })
+  return groups
+}
+
 export const signWitnesses: SignWitnesses =
   (key: SignWitnessesKey) =>
   ({
@@ -67,7 +77,7 @@ export const signWitnesses: SignWitnesses =
   }: {
     transactionHash: string
     witnesses: StructuredWitness[]
-    inputCells?: CachedLock[]
+    inputCells?: Cell[]
     skipMissingKeys?: boolean
   }) => {
     if (!key) throw new ParameterRequiredException('Signature provider')
