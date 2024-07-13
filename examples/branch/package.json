@@ -1,0 +1,9 @@
+{
+  "name": "branch-chain-examples",
+  "version": "0.1.0",
+  "description": "Branch chain examples of UTXO Stack",
+  "type": "commonjs",
+  "dependencies": {
+    "@utxo-stack/branch-chain": "workspace:*"
+  }
+}
