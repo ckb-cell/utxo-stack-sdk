@@ -3,7 +3,8 @@
   "scripts": {
     "build": "pnpm run --r --filter \"./packages/**\" build",
     "test": "jest",
-    "format": "eslint && prettier --write './**/*.{ts, js}'"
+    "format": "eslint --fix --ext .ts,.js && prettier --write './**/*.{ts, js}'",
+    "lint": "eslint --ext .ts,.js"
   },
   "husky": {
     "hooks": {

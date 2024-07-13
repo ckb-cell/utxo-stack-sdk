@@ -29,6 +29,9 @@ jobs:
         run: pnpm install
 
       - name: Compile
+        run: pnpm lint
+
+      - name: Compile
         run: pnpm build
 
       - name: Test
