@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IndexerSearchKey, IndexerCapacity, IndexerCell } from '../types'
+import { IndexerSearchKey, IndexerCapacity, IndexerCell, IndexerConfig, IndexerTransaction } from '../types'
 import { toSnakeCase, toCamelCase } from '../utils'
 
 export class CellIndexer {
@@ -40,12 +40,14 @@ export class CellIndexer {
     }
   }
 
-  async getCells(searchKey: IndexerSearchKey, limit = 10): Promise<IndexerCell[]> {
+  async getCells(searchKey: IndexerSearchKey, config?: IndexerConfig): Promise<IndexerCell[]> {
+    const order = config?.order ?? 'asc'
+    const limit = `0x${(config?.limit ?? 100).toString(16)}`
     const payload = {
       id: Math.floor(Math.random() * 100000),
       jsonrpc: '2.0',
       method: 'get_cells',
-      params: [toSnakeCase(searchKey), 'asc', `0x${limit.toString(16)}`],
+      params: [toSnakeCase(searchKey), order, limit, config?.afterCursor],
     }
     const body = JSON.stringify(payload, null, '  ')
     const response = (
@@ -65,9 +67,42 @@ export class CellIndexer {
     } else {
       const indexerCells = toCamelCase<IndexerCell[]>(response.result.objects)
       if (indexerCells === undefined) {
-        throw new Error('The response of get_cells indexer RPC  is invalid')
+        throw new Error('The response of get_cells indexer RPC is invalid')
       }
       return indexerCells
+    }
+  }
+
+  async getTransactions(searchKey: IndexerSearchKey, config?: IndexerConfig): Promise<IndexerTransaction[]> {
+    const order = config?.order ?? 'asc'
+    const limit = `0x${(config?.limit ?? 100).toString(16)}`
+    const payload = {
+      id: Math.floor(Math.random() * 100000),
+      jsonrpc: '2.0',
+      method: 'get_transactions',
+      params: [toSnakeCase(searchKey), order, limit, config?.afterCursor],
+    }
+    const body = JSON.stringify(payload, null, '  ')
+    const response = (
+      await axios({
+        method: 'post',
+        url: this.ckbIndexerUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        timeout: 20000,
+        data: body,
+      })
+    ).data
+    if (response.error) {
+      console.error(response.error)
+      throw new Error('get_transactions indexer RPC error')
+    } else {
+      const indexerTxs = toCamelCase<IndexerTransaction[]>(response.result.objects)
+      if (indexerTxs === undefined) {
+        throw new Error('The response of get_transactions indexer RPC is invalid')
+      }
+      return indexerTxs
     }
   }
 }

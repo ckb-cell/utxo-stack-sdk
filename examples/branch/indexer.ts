@@ -7,11 +7,15 @@ const run = async () => {
     args: '0xc8328aabcd9b9e8e64fbc566c4385c3bdeb219d7',
   }
   const indexer = new CellIndexer('http://localhost:8114')
+
   const balance = await indexer.getCellsCapacity({ script: lock, scriptType: 'lock' })
   console.log('balance capacity', BigInt(balance.capacity).toString())
 
-  const cells = await indexer.getCells({ script: lock, scriptType: 'lock' }, 3)
+  const cells = await indexer.getCells({ script: lock, scriptType: 'lock' }, { limit: 3 })
   console.log('cells', JSON.stringify(cells))
+
+  const transactions = await indexer.getTransactions({ script: lock, scriptType: 'lock' }, { limit: 3 })
+  console.log('transactions', JSON.stringify(transactions))
 }
 
 run()
