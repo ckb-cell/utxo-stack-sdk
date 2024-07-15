@@ -1,12 +1,12 @@
 import { ec as EC } from 'elliptic'
 
-import { hexToBytes } from './convertors'
+import { hexToBytes } from '../convertors'
 import {
   HexStringWithout0xException,
   ParameterRequiredException,
   PrivateKeyLenException,
   SignMessageException,
-} from './exceptions'
+} from '../exceptions'
 
 const ec = new EC('secp256k1')
 

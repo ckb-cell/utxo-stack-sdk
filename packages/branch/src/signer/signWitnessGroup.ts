@@ -1,6 +1,6 @@
 import { BranchComponents } from '../types'
 import { blake2b, hexToBytes, PERSONAL, toUint64Le, serializeWitnessArgs } from '../utils'
-import { ECPair } from '../utils/ecpair'
+import { ECPair } from '../utils/crypto/ecpair'
 import { serializeMultisigConfig, MultisigConfig } from './multisig'
 
 export type SignatureProvider = string | ((message: string | Uint8Array) => string)

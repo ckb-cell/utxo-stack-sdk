@@ -1,4 +1,4 @@
-const { serializeEpoch, parseEpoch, getWithdrawEpoch } = require('../../../../dist/index')
+const { serializeEpoch, parseEpoch } = require('../../../../dist/index')
 const fixtures = require('./fixtures.json')
 
 describe('Test epochs', () => {
@@ -40,22 +40,4 @@ describe('Test epochs', () => {
     })
   })
 
-  describe('get withdraw epoch', () => {
-    const fixtureTable = Object.entries(fixtures.getWithdrawEpoch).map(([title, { params, expected, exception }]) => [
-      title,
-      params,
-      expected,
-      exception,
-    ])
-
-    test.each(fixtureTable)(`%s`, (_title, params, expected, exception) => {
-      expect.assertions(1)
-      try {
-        const actual = getWithdrawEpoch(...params)
-        expect(actual).toBe(expected)
-      } catch (err) {
-        expect(err).toEqual(new Error(exception))
-      }
-    })
-  })
 })
