@@ -268,7 +268,7 @@ export namespace BranchComponents {
 
   /**
    * @typedef Cell, cell object
-   * @property capacty, cell capacity
+   * @property capacity, cell capacity
    * @property lock, lock hash
    * @property outPoint
    */
@@ -509,4 +509,14 @@ export namespace BranchComponents {
     mean: string
     median: string
   }
+
+  export type ResolvedCell = {
+    data: string
+    lock: Script
+    type?: Script
+    capacity: Capacity
+    outPoint: OutPoint
+  }
+
+  export type StructuredWitness = WitnessArgs | Witness
 }

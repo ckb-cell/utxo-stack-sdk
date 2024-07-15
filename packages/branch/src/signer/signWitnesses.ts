@@ -2,12 +2,13 @@ import { scriptToHash, serializeWitnessArgs } from '../utils'
 import { ParameterRequiredException } from '../utils/exceptions'
 import { SignatureProvider, signWitnessGroup } from './signWitnessGroup'
 import { getMultisigStatus, isMultisigConfig, MultisigConfig, serializeMultisigConfig, SignStatus } from './multisig'
-import { BranchComponents, StructuredWitness } from '../types'
+import { BranchComponents } from '../types'
 
 type LockHash = string
 type TransactionHash = string
 type Index = number
 type Cell = { lock: BranchComponents.Script }
+
 export type MultisigOption = {
   sk: SignatureProvider
   blake160: string
@@ -19,23 +20,26 @@ type SignWitnessesKey = SignatureProvider | Map<LockHash, SignatureProvider | Mu
 export interface SignWitnesses {
   (
     key: SignatureProvider,
-  ): (params: { transactionHash: TransactionHash; witnesses: StructuredWitness[] }) => StructuredWitness[]
+  ): (params: {
+    transactionHash: TransactionHash
+    witnesses: BranchComponents.StructuredWitness[]
+  }) => BranchComponents.StructuredWitness[]
   (
     key: Map<LockHash, SignatureProvider | MultisigOption>,
   ): (params: {
     transactionHash: TransactionHash
-    witnesses: StructuredWitness[]
+    witnesses: BranchComponents.StructuredWitness[]
     inputCells: Cell[]
     skipMissingKeys: boolean
-  }) => StructuredWitness[]
+  }) => BranchComponents.StructuredWitness[]
   (
     key: SignWitnessesKey,
   ): (params: {
     transactionHash: TransactionHash
-    witnesses: StructuredWitness[]
+    witnesses: BranchComponents.StructuredWitness[]
     inputCells?: Cell[]
     skipMissingKeys?: boolean
-  }) => StructuredWitness[]
+  }) => BranchComponents.StructuredWitness[]
 }
 
 export const isMap = <K = any, V = any>(val: any): val is Map<K, V> => {
@@ -76,7 +80,7 @@ export const signWitnesses: SignWitnesses =
     skipMissingKeys = false,
   }: {
     transactionHash: string
-    witnesses: StructuredWitness[]
+    witnesses: BranchComponents.StructuredWitness[]
     inputCells?: Cell[]
     skipMissingKeys?: boolean
   }) => {
@@ -101,7 +105,7 @@ export const signWitnesses: SignWitnesses =
           }
         }
 
-        const ws = [...indices.map(idx => witnesses[idx]), ...restWitnesses] as StructuredWitness[]
+        const ws = [...indices.map(idx => witnesses[idx]), ...restWitnesses] as BranchComponents.StructuredWitness[]
         if (typeof sk === 'object' && isMultisigOption(sk)) {
           const witnessIncludeSignature = signWitnessGroup(sk.sk, transactionHash, ws, sk.config)[0]
           // is multisig sign

@@ -1,4 +1,4 @@
-import { StructuredWitness } from '../types'
+import { BranchComponents } from '../types'
 import { blake2b, hexToBytes, PERSONAL, toUint64Le, serializeWitnessArgs } from '../utils'
 import { ECPair } from '../utils/ecpair'
 import { serializeMultisigConfig, MultisigConfig } from './multisig'
@@ -9,20 +9,22 @@ type TransactionHash = string
 export function signWitnessGroup(
   sk: SignatureProvider,
   transactionHash: TransactionHash,
-  witnessGroup: StructuredWitness[],
+  witnessGroup: BranchComponents.StructuredWitness[],
   multisigConfig?: MultisigConfig,
-): StructuredWitness[]
+): BranchComponents.StructuredWitness[]
 export function signWitnessGroup(
-  sk: (message: string | Uint8Array, witness: StructuredWitness[]) => Promise<string>,
+  sk: (message: string | Uint8Array, witness: BranchComponents.StructuredWitness[]) => Promise<string>,
   transactionHash: TransactionHash,
-  witnessGroup: StructuredWitness[],
+  witnessGroup: BranchComponents.StructuredWitness[],
   multisigConfig?: MultisigConfig,
-): Promise<StructuredWitness[]>
+): Promise<BranchComponents.StructuredWitness[]>
 
 export function signWitnessGroup(
-  sk: SignatureProvider | ((message: string | Uint8Array, witness: StructuredWitness[]) => Promise<string>),
+  sk:
+    | SignatureProvider
+    | ((message: string | Uint8Array, witness: BranchComponents.StructuredWitness[]) => Promise<string>),
   transactionHash: TransactionHash,
-  witnessGroup: StructuredWitness[],
+  witnessGroup: BranchComponents.StructuredWitness[],
   multisigConfig?: MultisigConfig,
 ) {
   if (!witnessGroup.length) {

@@ -2,10 +2,10 @@ import { BranchRPC } from '../rpc'
 import { ParameterRequiredException } from '../utils/exceptions'
 import * as utils from '../utils'
 import { isMap, signWitnesses } from './signWitnesses'
-import { BranchComponents, RawTransactionParams } from '../types'
+import { BranchComponents } from '../types'
 
 const filterCellsByInputs = (
-  cells: Pick<RawTransactionParams.Cell, 'outPoint' | 'lock'>[],
+  cells: Pick<BranchComponents.ResolvedCell, 'outPoint' | 'lock'>[],
   inputs: Pick<BranchComponents.CellInput, 'previousOutput'>[],
 ) => {
   return inputs.map(input => {
@@ -78,5 +78,4 @@ export class Branch {
     if (!transaction.outputsData) throw new ParameterRequiredException('OutputsData')
     if (transaction.outputsData.length < transaction.outputs.length) throw new Error('Invalid count of outputsData')
   }
-
 }
