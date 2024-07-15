@@ -12,7 +12,6 @@ import {
   AddressPayloadException,
   CodeHashException,
   HashTypeException,
-  ParameterRequiredException,
   AddressFormatTypeException,
   AddressFormatTypeAndEncodeMethodNotMatchException,
 } from '../exceptions'
@@ -72,128 +71,60 @@ const scriptToPayload = ({ codeHash, hashType, args }: BranchComponents.Script):
  * @function scriptToAddress
  * @description The only way recommended to generated a full address of new version
  * @param {object} script
- * @param {booealn} isMainnet
+ * @param {boolean} isMainnet
  * @returns {string} address
  */
 export const scriptToAddress = (script: BranchComponents.Script, isMainnet = true) =>
   payloadToAddress(scriptToPayload(script), isMainnet)
 
-/**
- * 0x00 SECP256K1 + blake160
- * 0x01 SECP256k1 + multisig
- * 0x02 anyone_can_pay
- */
-export type CodeHashIndex = '0x00' | '0x01' | '0x02'
-
 export interface AddressOptions {
   prefix?: AddressPrefix
   type?: AddressType
-  codeHashOrCodeHashIndex?: CodeHashIndex | BranchComponents.Hash256
+  codeHash?: BranchComponents.Hash256
 }
 
 /**
  * @function toAddressPayload
- * @description obsolete payload = type(01) | code hash index(00) | args(blake160-formatted pubkey)
- *             new payload = type(00) | code hash | hash type(00|01|02) | args
+ * @description recommended payload = type(00) | code hash | hash type(00|01|02) | args
  * @see https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md
  * @param {string | Uint8Array} args, use as the identifier of an address, usually the public key hash is used.
- * @param {string} type, used to indicate which format is adopted to compose the address.
- * @param {string} codeHashOrCodeHashIndex, the referenced code hash or code hash index the address binds to,
- *                 default to be secp256k1 code hash/code hash index
+ * @param {string} codeHash, the referenced code hash that the address binds to, default to be secp256k1 code hash
  */
 export const toAddressPayload = (
   args: string | Uint8Array,
-  type: AddressType = AddressType.HashIdx,
-  codeHashOrCodeHashIndex?: CodeHashIndex | BranchComponents.Hash256,
-  hashType?: BranchComponents.ScriptHashType,
+  codeHash = SECP256K1_BLAKE160.codeHash,
+  hashType = SECP256K1_BLAKE160.hashType,
 ): Uint8Array => {
   if (typeof args === 'string' && !args.startsWith('0x')) {
     throw new HexStringWithout0xException(args)
   }
 
-  if (
-    ![AddressType.HashIdx, AddressType.DataCodeHash, AddressType.TypeCodeHash, AddressType.FullVersion].includes(type)
-  ) {
-    throw new AddressFormatTypeException(+type)
-  }
-
-  if ([AddressType.DataCodeHash, AddressType.TypeCodeHash].includes(type)) {
-    /* eslint-disable max-len */
-    console.warn(
-      `Address of 'AddressType.DataCodeHash' or 'AddressType.TypeCodeHash' is deprecated, please use address of AddressPrefix.FullVersion`,
-    )
-  }
-
-  if (!codeHashOrCodeHashIndex) {
-    codeHashOrCodeHashIndex = type === AddressType.HashIdx ? '0x00' : SECP256K1_BLAKE160.codeHash
-  }
-
-  if (type !== AddressType.FullVersion) {
-    return new Uint8Array([
-      ...hexToBytes(type),
-      ...hexToBytes(codeHashOrCodeHashIndex),
-      ...(typeof args === 'string' ? hexToBytes(args) : args),
-    ])
-  }
-
-  if (!hashType && codeHashOrCodeHashIndex === SECP256K1_BLAKE160.codeHash) {
-    hashType = SECP256K1_BLAKE160.hashType
-  }
-
-  if (!codeHashOrCodeHashIndex?.startsWith('0x') || codeHashOrCodeHashIndex.length !== 66) {
-    throw new CodeHashException(codeHashOrCodeHashIndex)
-  }
-
-  if (!hashType) {
-    throw new ParameterRequiredException('hashType')
+  if (!codeHash?.startsWith('0x') || codeHash.length !== 66) {
+    throw new CodeHashException(codeHash)
   }
 
   return scriptToPayload({
-    codeHash: codeHashOrCodeHashIndex,
+    codeHash: codeHash,
     hashType,
     args: typeof args === 'string' ? args : bytesToHex(args),
   })
 }
 
 /**
- * @function bech32Address
- * @description generate the address by bech32 algorithm
+ * @function bech32mAddress
+ * @description generate the address by bech32m algorithm
  * @param args, used as the identifier of an address, usually the public key hash is used.
  * @param {[string]} prefix, the prefix precedes the address, default to be ckb.
- * @param {[string]} type, used to indicate which format is adopted to compose the address, default to be 0x01.
- * @param {[string]} codeHashOrCodeHashIndex, the referenced code hash or code hash index the address binds to,
- *                                            default to be 0x00.
+ * @param {[string]} codeHash, the referenced code hash that the address binds to.
  */
-export const bech32Address = (
+export const bech32mAddress = (
   args: Uint8Array | string,
-  { prefix = AddressPrefix.Mainnet, type = AddressType.HashIdx, codeHashOrCodeHashIndex = '' }: AddressOptions = {},
-) => bech32.encode(prefix, bech32.toWords(toAddressPayload(args, type, codeHashOrCodeHashIndex)), MAX_BECH32_LIMIT)
-
-/**
- * @deprecated
- * @name fullPayloadToAddress
- * @description deprecated method to generate the address with payload in full version format. Use scriptToAddress instead.
- * @param {string} args, used as the identifier of an address.
- * @param {[string]} prefix, the prefix precedes the address, default to be ckb.
- * @param {[string]} type, used to indicate which format the address conforms to, default to be 0x02,
- *                       with hash type of Data or with hash type of Type.
- * @param {string} codeHash, the code hash used in the full version payload.
- */
-export const fullPayloadToAddress = ({
-  args,
-  prefix,
-  type = AddressType.DataCodeHash,
-  codeHash,
-}: {
-  args: string
-  prefix?: AddressPrefix
-  type?: AddressType.DataCodeHash | AddressType.TypeCodeHash
-  codeHash: BranchComponents.Hash256
-}) => bech32Address(args, { prefix, type, codeHashOrCodeHashIndex: codeHash })
+  { prefix = AddressPrefix.Mainnet, codeHash }: AddressOptions = {},
+) => bech32m.encode(prefix, bech32m.toWords(toAddressPayload(args, codeHash)), MAX_BECH32_LIMIT)
 
 export const pubkeyToAddress = (pubkey: Uint8Array | string, options: AddressOptions = {}) => {
   const publicKeyHash = blake160(pubkey)
-  return bech32Address(publicKeyHash, options)
+  return bech32mAddress(publicKeyHash, options)
 }
 
 const isValidShortVersionPayload = (payload: Uint8Array, bech32Type?: Bech32Type) => {

@@ -3,8 +3,6 @@ const {
   privateKeyToAddress,
   scriptToHash,
   rawTransactionToHash,
-  calculateMaximumWithdraw,
-  extractDAOData,
   ParameterRequiredException,
 } = require('../../../../dist/index')
 const rawTransactionToHashFixtures = require('./rawTransactionToHash.fixtures.json')
@@ -72,8 +70,8 @@ describe('privateKeyToPublicKey', () => {
 describe('privateKeyToAddress', () => {
   const fixture = {
     privateKey: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    mainnetAddress: 'ckb1qyqw975zuu9svtyxgjuq44lv7mspte0n2tmqqm3w53',
-    testnetAddress: 'ckt1qyqw975zuu9svtyxgjuq44lv7mspte0n2tmqa703cd',
+    mainnetAddress: 'ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq0zl2pwwzcx9jryfwq26lk0dcq4uhe49asy6ums9',
+    testnetAddress: 'ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq0zl2pwwzcx9jryfwq26lk0dcq4uhe49as2gh56a',
   }
   expect(privateKeyToAddress(fixture.privateKey)).toBe(fixture.mainnetAddress)
   expect(
@@ -86,36 +84,4 @@ describe('privateKeyToAddress', () => {
       prefix: 'ckt',
     }),
   ).toBe(fixture.testnetAddress)
-})
-
-describe('calculate-maximum-withdraw', () => {
-  const outputCell = {
-    capacity: '0xe8d4a51000',
-    lock: {
-      args: '0xf601cac75568afec3b9c9af1e1ff730062007685',
-      codeHash: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
-      hashType: 'type',
-    },
-    type: {
-      args: '0x',
-      codeHash: '0x82d76d1b75fe2fd9a27dfbaa65a039221a380d76c926f378d3f81cf3e7e13f2e',
-      hashType: 'type',
-    },
-  }
-  expect(
-    calculateMaximumWithdraw(
-      outputCell,
-      '0x0000000000000000',
-      '0x1aaf2ca6847c223c3ef9e8c069c9250020212a6311e2d30200609349396eb407',
-      '0x9bafffa73e432e3c94c6f9db34cb25009f9e4efe4b5fd60200ea63c6d4ffb407',
-    ),
-  ).toBe('0xe8df95141e')
-})
-
-describe('extract header dao', () => {
-  const DAOData = extractDAOData('0x1aaf2ca6847c223c3ef9e8c069c9250020212a6311e2d30200609349396eb407')
-  expect(DAOData.c).toBe('0x3c227c84a62caf1a')
-  expect(DAOData.ar).toBe('0x0025c969c0e8f93e')
-  expect(DAOData.s).toBe('0x02d3e211632a2120')
-  expect(DAOData.u).toBe('0x07b46e3949936000')
 })

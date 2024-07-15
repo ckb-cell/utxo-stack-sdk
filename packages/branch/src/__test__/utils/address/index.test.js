@@ -1,9 +1,7 @@
 const {
   toAddressPayload,
-  bech32Address,
   pubkeyToAddress,
   parseAddress,
-  fullPayloadToAddress,
   addressToScript,
   scriptToAddress,
 } = require('../../../../dist/index')
@@ -22,40 +20,6 @@ describe('Test address module', () => {
       try {
         const actual = toAddressPayload(...params)
         expect(actual).toEqual(new Uint8Array(expected))
-      } catch (err) {
-        expect(err).toEqual(new Error(exception))
-      }
-    })
-  })
-
-  describe('fullPayloadToAddress', () => {
-    const fixtureTable = Object.entries(fixtures.fullPayloadToAddress).map(
-      ([title, { params, expected, exception }]) => [title, params, expected, exception],
-    )
-    test.each(fixtureTable)(`%s`, (_title, params, expected, exception) => {
-      expect.assertions(1)
-      try {
-        const actual = fullPayloadToAddress(...params)
-        expect(actual).toBe(expected)
-      } catch (err) {
-        expect(err).toEqual(new Error(exception))
-      }
-    })
-  })
-
-  describe('bech32Address', () => {
-    const fixtureTable = Object.entries(fixtures.bech32Address).map(([title, { params, expected, exception }]) => [
-      title,
-      params,
-      expected,
-      exception,
-    ])
-
-    test.each(fixtureTable)(`%s`, (_title, params, expected, exception) => {
-      expect.assertions(1)
-      try {
-        const actual = bech32Address(...params)
-        expect(actual).toBe(expected)
       } catch (err) {
         expect(err).toEqual(new Error(exception))
       }
