@@ -47,7 +47,7 @@ export class Method {
     })
   }
 
-  public getPayload = (...params: (string | number | object)[]) => {
+  public getPayload = (...params: (string | number | boolean | object)[]) => {
     const data = params.map((p, i) => (this.#options.paramsFormatters[i] && this.#options.paramsFormatters[i](p)) || p)
     const id = Math.round(Math.random() * 10000)
     const payload = {

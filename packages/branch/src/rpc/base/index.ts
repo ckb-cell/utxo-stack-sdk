@@ -333,7 +333,7 @@ export interface Base {
    * @memberof DefaultRPC
    * @param {boolean | null} verbose - true for a json object, false for array of transaction ids, default=false
    * @description Returns all transaction ids in tx pool as a json array of string transaction ids.
-   * @return {Promise<object>} CKBComponents.RawTxPool
+   * @return {Promise<object>} BranchComponents.RawTxPool
    */
   getRawTxPool(): Promise<BranchComponents.TxPoolIds>
   getRawTxPool(verbose: true): Promise<BranchComponents.TxPoolVerbosity>

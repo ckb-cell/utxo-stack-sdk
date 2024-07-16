@@ -59,7 +59,7 @@ export class BranchRPC extends Base {
   }
 
   /* eslint-disable prettier/prettier */
-  public createBatchRequest = <N extends keyof Base, P extends (string | number | object)[], R = any[]>(
+  public createBatchRequest = <N extends keyof Base, P extends (string | number | boolean | object)[], R = any[]>(
     params: [method: N, ...rest: P][] = [],
   ) => {
     const ctx = this
