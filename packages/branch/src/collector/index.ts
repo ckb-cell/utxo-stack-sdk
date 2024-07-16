@@ -1,6 +1,6 @@
-import { Branch }  from '../signer'
+import { Branch } from '../signer'
 import { CellIndexer } from '../indexer'
-import { BranchComponents, CollectResult, Hex, IndexerCell, IndexerSearchKey } from '../types';
+import { BranchComponents, CollectResult, Hex, IndexerCell, IndexerSearchKey } from '../types'
 
 const MIN_CAPACITY = BigInt(61)
 

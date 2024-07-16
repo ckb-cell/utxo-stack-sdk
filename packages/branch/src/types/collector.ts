@@ -1,4 +1,4 @@
-import { BranchComponents } from "./blockchain"
+import { BranchComponents } from './blockchain'
 
 export interface CollectResult {
   inputs: BranchComponents.CellInput[]
