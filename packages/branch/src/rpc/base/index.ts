@@ -92,8 +92,7 @@ export interface Base {
   /**
    * @method getLiveCell
    * @memberof DefaultRPC
-   * @description rpc to get a cell by outPoint, the meaning of outPoint could be found in ckb-types,
-   *              please distinguish outPoint and cellOutPoint
+   * @description rpc to get a cell by outPoint, please distinguish outPoint and cellOutPoint
    * @param {object} outPoint - cell's outPoint
    * @param {boolean} withData - set withData to true to return cell data and data hash if the cell is live
    * @return {Promise<object>} liveCellWithStatus
@@ -118,7 +117,7 @@ export interface Base {
   /**
    * @method getCellbaseOutputCapacityDetails
    * @memberof DefaultRPC
-   * @description Returns each component of the created CKB in this block's cellbase, which is issued to
+   * @description Returns each component of the created Branch chain in this block's cellbase, which is issued to
    *              a block N - 1 - ProposalWindow.farthest, where this block's height is N.
    * @param {string} blockHash
    *
@@ -299,8 +298,7 @@ export interface Base {
    * @method sendTransaction
    * @memberof DefaultRPC
    * @description rpc to send a new transaction into transaction pool
-   * @param {object} rawTransaction - a raw transaction includes cell deps, inputs, outputs, version, and witnesses,
-   *                                  detailed info could be found in ckb-types
+   * @param {object} rawTransaction - a raw transaction includes cell deps, inputs, outputs, version, and witnesses
    * @param {string} [outputsValidator] - Validates the transaction outputs before entering the tx-pool,
    *                                  an optional string parameter (enum: default | passthrough ),
    *                                  null and passthrough mean skipping outputs validation

@@ -8,9 +8,9 @@ export class Collector {
   branch: Branch
   indexer: CellIndexer
 
-  constructor({ ckbNodeUrl, ckbIndexerUrl }: { ckbNodeUrl: string; ckbIndexerUrl: string }) {
-    this.branch = new Branch(ckbNodeUrl)
-    this.indexer = new CellIndexer(ckbIndexerUrl)
+  constructor({ nodeUrl, indexerUrl }: { nodeUrl: string; indexerUrl: string }) {
+    this.branch = new Branch(nodeUrl)
+    this.indexer = new CellIndexer(indexerUrl)
   }
 
   async getCells({
@@ -43,7 +43,12 @@ export class Collector {
     return this.indexer.getCells(searchKey, { order: 'asc', limit: 100 })
   }
 
-  collectInputs(liveCells: IndexerCell[], needCapacity: bigint, fee: bigint, changeCapacity = MIN_CAPACITY): CollectResult {
+  collectInputs(
+    liveCells: IndexerCell[],
+    needCapacity: bigint,
+    fee: bigint,
+    changeCapacity = MIN_CAPACITY,
+  ): CollectResult {
     const inputs: BranchComponents.CellInput[] = []
     let sumInputsCapacity = BigInt(0)
     for (const cell of liveCells) {
@@ -57,7 +62,7 @@ export class Collector {
       }
     }
     if (sumInputsCapacity < needCapacity + changeCapacity + fee) {
-      throw new Error('Insufficient free CKB balance')
+      throw new Error('Insufficient free Branch chain balance')
     }
     return { inputs, sumInputsCapacity }
   }

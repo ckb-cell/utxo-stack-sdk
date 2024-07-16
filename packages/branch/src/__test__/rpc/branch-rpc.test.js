@@ -24,7 +24,7 @@ describe('Test with mock', () => {
     expect(rpc.node.url).toBe('http://localhost:8114')
   })
 
-  describe('ckb-rpc success', () => {
+  describe('branch-rpc success', () => {
     afterEach(() => {
       jest.clearAllMocks()
     })
@@ -618,7 +618,7 @@ describe('Test with mock', () => {
             dao_type_hash: '0x82d76d1b75fe2fd9a27dfbaa65a039221a380d76c926f378d3f81cf3e7e13f2e',
             epoch_duration_target: '0x3840',
             genesis_hash: '0xeaa2c979898f80a12404578a9e1332d45c8ff2bf665457b10f9934203f230780',
-            id: 'ckb_dev',
+            id: 'branch_dev',
             initial_primary_epoch_reward: '0xae6c73c3e070',
             max_block_bytes: '0x91c08',
             max_block_cycles: '0x2540be400',
@@ -663,7 +663,7 @@ describe('Test with mock', () => {
         daoTypeHash: '0x82d76d1b75fe2fd9a27dfbaa65a039221a380d76c926f378d3f81cf3e7e13f2e',
         epochDurationTarget: '0x3840',
         genesisHash: '0xeaa2c979898f80a12404578a9e1332d45c8ff2bf665457b10f9934203f230780',
-        id: 'ckb_dev',
+        id: 'branch_dev',
         initialPrimaryEpochReward: '0xae6c73c3e070',
         maxBlockBytes: '0x91c08',
         maxBlockCycles: '0x2540be400',
@@ -698,7 +698,7 @@ describe('Test with mock', () => {
           jsonrpc: '2.0',
           result: {
             alerts: [],
-            chain: 'ckb_dev',
+            chain: 'branch_dev',
             difficulty: '0x100',
             epoch: '0xa00090000e2',
             is_initial_block_download: true,
@@ -716,7 +716,7 @@ describe('Test with mock', () => {
       })
       expect(res).toEqual({
         alerts: [],
-        chain: 'ckb_dev',
+        chain: 'branch_dev',
         difficulty: '0x100',
         epoch: '0xa00090000e2',
         isInitialBlockDownload: true,
@@ -783,7 +783,7 @@ describe('Test with mock', () => {
             protocols: [
               {
                 id: '0x0',
-                name: '/ckb/ping',
+                name: '/branch/ping',
                 support_versions: ['0.0.1'],
               },
             ],
@@ -812,7 +812,7 @@ describe('Test with mock', () => {
         protocols: [
           {
             id: '0x0',
-            name: '/ckb/ping',
+            name: '/branch/ping',
             supportVersions: ['0.0.1'],
           },
         ],
@@ -1646,7 +1646,7 @@ describe('Test with mock', () => {
                 protocols: [
                   {
                     id: '0x0',
-                    name: '/ckb/ping',
+                    name: '/branch/ping',
                     support_versions: ['0.0.1'],
                   },
                 ],
@@ -1720,7 +1720,7 @@ describe('Test with mock', () => {
             protocols: [
               {
                 id: '0x0',
-                name: '/ckb/ping',
+                name: '/branch/ping',
                 supportVersions: ['0.0.1'],
               },
             ],
@@ -1736,7 +1736,7 @@ describe('Test with mock', () => {
     })
   })
 
-  describe('ckb-rpc errors', () => {
+  describe('branch-rpc errors', () => {
     it('throw raw error', async () => {
       expect.assertions(1)
       try {

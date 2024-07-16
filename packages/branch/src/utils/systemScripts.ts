@@ -1,8 +1,8 @@
 import { BranchComponents } from '../types'
 
 /**
- * @summary System scripts are the smart contracts built and deployed by the CKB core team.
- *          System scripts complement the function of CKB in a flexible way.
+ * @summary System scripts are the smart contracts built and deployed by the Branch chain core team.
+ *          System scripts complement the function of Branch chain in a flexible way.
  *          System scripts can provide
  *          -  core functions (e.g. secp256k1/blake160 and Nervos DAO),
  *          -  shared standard implementations (e.g. Simple UDT),
@@ -19,7 +19,7 @@ type OutPoints = Record<'mainnetOutPoint' | 'testnetOutPoint', BranchComponents.
  * @memberof System Scripts
  * @typedef {Lock Script}
  * @name SECP256K1_BLAKE160
- * @description SECP256K1_BLAKE160 is the default lock script to verify CKB transaction signature
+ * @description SECP256K1_BLAKE160 is the default lock script to verify Branch chain transaction signature
  */
 export const SECP256K1_BLAKE160: SystemScript & OutPoints = {
   codeHash: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',

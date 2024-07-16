@@ -8,7 +8,7 @@ const transferSatoshi = async () => {
   const address = privateKeyToAddress(SECP256K1_PRIVATE_KEY, { prefix: AddressPrefix.Testnet})
   const lock = addressToScript(address)
 
-  const collector = new Collector({ ckbIndexerUrl: 'http://localhost:8114', ckbNodeUrl: 'http://localhost:8114' })
+  const collector = new Collector({ indexerUrl: 'http://localhost:8114', nodeUrl: 'http://localhost:8114' })
   const cells = await collector.getCells({ lock })
   if (cells.length === 0) {
     throw new Error("No empty cells found")

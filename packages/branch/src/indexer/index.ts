@@ -3,10 +3,10 @@ import { IndexerSearchKey, IndexerCapacity, IndexerCell, IndexerConfig, IndexerT
 import { toSnakeCase, toCamelCase } from '../utils'
 
 export class CellIndexer {
-  private ckbIndexerUrl: string
+  private indexerUrl: string
 
-  constructor(ckbIndexerUrl: string) {
-    this.ckbIndexerUrl = ckbIndexerUrl
+  constructor(indexerUrl: string) {
+    this.indexerUrl = indexerUrl
   }
 
   async getCellsCapacity(searchKey: IndexerSearchKey): Promise<IndexerCapacity> {
@@ -20,7 +20,7 @@ export class CellIndexer {
     const response = (
       await axios({
         method: 'post',
-        url: this.ckbIndexerUrl,
+        url: this.indexerUrl,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -53,7 +53,7 @@ export class CellIndexer {
     const response = (
       await axios({
         method: 'post',
-        url: this.ckbIndexerUrl,
+        url: this.indexerUrl,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -86,7 +86,7 @@ export class CellIndexer {
     const response = (
       await axios({
         method: 'post',
-        url: this.ckbIndexerUrl,
+        url: this.indexerUrl,
         headers: {
           'Content-Type': 'application/json',
         },
