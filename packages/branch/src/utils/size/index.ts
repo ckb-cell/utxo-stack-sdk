@@ -18,7 +18,7 @@ export const cellOccupied = (cell: BranchComponents.CellOutput) => {
  * @function calculateTransactionFee
  * @description calculate the transaction fee by transaction size and fee rate
  * @param {string | bigint} transactionSize, the byte size of transaction
- * @param {string | bigint} feeRate, the fee rate with unit of shannons/KB
+ * @param {string | bigint} feeRate, the fee rate with unit of satoshi/KB
  * @returns {string} transactionFee
  */
 export const calculateTransactionFee = (transactionSize: string | bigint, feeRate: string | bigint): string => {

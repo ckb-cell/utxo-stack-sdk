@@ -362,7 +362,7 @@ export namespace BranchComponents {
   }
 
   export enum CapacityUnit {
-    Shannon = 1,
+    Satoshi = 1,
     Byte = 100000000,
   }
 
