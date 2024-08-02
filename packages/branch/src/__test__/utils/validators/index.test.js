@@ -1,4 +1,4 @@
-const { assertToBeHexString, assertToBeHexStringOrBigint } = require('../../../../dist/index')
+const { assertToBeHexString, assertToBeHexStringOrBigint } = require('../../../../dist')
 const fixtures = require('./fixtures.json')
 
 describe('validators', () => {

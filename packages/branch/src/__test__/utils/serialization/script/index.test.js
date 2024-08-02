@@ -1,4 +1,4 @@
-const { serializeArgs, serializeCodeHash, serializeHashType, serializeScript } = require('../../../../../dist/index')
+const { serializeArgs, serializeCodeHash, serializeHashType, serializeScript } = require('../../../../../dist')
 const fixtures = require('./fixtures.json')
 
 describe('Test Script Serialization', () => {

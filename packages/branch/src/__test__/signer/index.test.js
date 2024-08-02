@@ -2,7 +2,7 @@ const fixtures = require('./fixtures.json')
 const rpc = require('../__mocks__/rpc')
 const CellCollector = require('../__mocks__/CellCollector')
 
-const { Branch } = require('../../../dist/index')
+const { Branch } = require('../../../dist')
 
 describe('branch', () => {
   const url = 'http://localhost:8114'

@@ -4,6 +4,6 @@
   "description": "Branch chain examples of UTXO Stack",
   "type": "commonjs",
   "dependencies": {
-    "@utxo-stack/branch-chain": "workspace:*"
+    "@utxo-stack/branch": "workspace:*"
   }
 }

@@ -3,7 +3,7 @@
 jest.mock('axios')
 
 const axiosMock = require('axios')
-const { BranchRPC } = require('../../../dist/index')
+const { BranchRPC } = require('../../../dist')
 
 describe('Test with mock', () => {
   const rpc = new BranchRPC('http://localhost:8114')

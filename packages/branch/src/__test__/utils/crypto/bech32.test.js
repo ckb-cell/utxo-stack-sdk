@@ -1,4 +1,4 @@
-const { bech32 } = require('../../../../dist/index')
+const { bech32 } = require('../../../../dist')
 const fixtures = require('./bech32.fixtures.json')
 
 describe('bech32', () => {

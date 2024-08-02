@@ -1,4 +1,4 @@
-const { ECPair, signWitnesses } = require('../../../../dist/index')
+const { ECPair, signWitnesses } = require('../../../../dist')
 const fixtures = require('./fixtures.json')
 
 describe('test sign witnesses', () => {

@@ -3,7 +3,7 @@ const {
   ECPair,
   ParameterRequiredException,
   HexStringWithout0xException,
-} = require('../../../../dist/index')
+} = require('../../../../dist')
 const { sigFixtures, signRecoverableFixtures } = require('./signature.fixtures.json')
 const { instantiate: instantiateFixtures } = require('./ecpare.fixtures.json')
 

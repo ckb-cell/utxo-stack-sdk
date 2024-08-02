@@ -1,4 +1,4 @@
-const { serializeMultisigConfig, hashMultisig, getMultisigStatus, isMultisigConfig } = require('../../../../dist/index')
+const { serializeMultisigConfig, hashMultisig, getMultisigStatus, isMultisigConfig } = require('../../../../dist')
 const fixtures = require('./fixtures.json')
 
 describe('test serializeMultisigConfig', () => {

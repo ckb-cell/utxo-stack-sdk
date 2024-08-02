@@ -1,4 +1,4 @@
-const { blake2b, PERSONAL } = require('../../../../dist/index')
+const { blake2b, PERSONAL } = require('../../../../dist')
 const fixtures = require('./blake2b.fixtures.json')
 
 describe('blake2b', () => {

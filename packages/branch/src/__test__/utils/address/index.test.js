@@ -4,7 +4,7 @@ const {
   parseAddress,
   addressToScript,
   scriptToAddress,
-} = require('../../../../dist/index')
+} = require('../../../../dist')
 const fixtures = require('./fixtures.json')
 
 describe('Test address module', () => {

@@ -1,4 +1,4 @@
-const { SECP256K1_BLAKE160, SECP256K1_MULTISIG } = require('../../../../dist/index')
+const { SECP256K1_BLAKE160, SECP256K1_MULTISIG } = require('../../../../dist')
 const fixtures = require('./fixtures.json')
 
 const getInfo = ({ codeHash, hashType, depType, mainnetOutPoint, testnetOutPoint }, isMain) => {

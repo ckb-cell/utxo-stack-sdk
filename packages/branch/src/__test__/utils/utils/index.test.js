@@ -4,7 +4,7 @@ const {
   scriptToHash,
   rawTransactionToHash,
   ParameterRequiredException,
-} = require('../../../../dist/index')
+} = require('../../../../dist')
 const rawTransactionToHashFixtures = require('./rawTransactionToHash.fixtures.json')
 
 describe('scriptToHash', () => {

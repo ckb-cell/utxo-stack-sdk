@@ -1,4 +1,4 @@
-const { getTransactionSize } = require('../../../../dist/index')
+const { getTransactionSize } = require('../../../../dist')
 const fixtures = require('./fixtures.json')
 
 describe('Test sizes', () => {

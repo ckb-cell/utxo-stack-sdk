@@ -44,6 +44,21 @@ export const toUint64Le = (uint64: string | bigint) => {
   return `0x${viewLeft}${viewRight}`
 }
 
+/**
+ * Converts an uint128 into a hex string in little endian
+ *
+ * @memberof convertors
+ * @param {string|bigint} uint128 The uint128 to convert
+ * @returns {string} Returns a hex string
+ */
+export const toUint128Le = (uint128: string | bigint) => {
+  assertToBeHexStringOrBigint(uint128)
+  const val = (typeof uint128 === 'bigint' ? uint128.toString(16) : uint128.slice(2)).padStart(16, '0')
+  const viewRight = toUint64Le(`0x${val.slice(0, 8)}`).slice(2)
+  const viewLeft = toUint64Le(`0x${val.slice(8)}`).slice(2)
+  return `0x${viewLeft}${viewRight}`
+}
+
 export const hexToBytes = (rawhex: string | number | bigint) => {
   if (rawhex === '') return new Uint8Array()
   if (typeof rawhex === 'string' && !rawhex.startsWith('0x')) {

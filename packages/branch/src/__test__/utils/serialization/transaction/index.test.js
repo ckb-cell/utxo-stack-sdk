@@ -13,7 +13,7 @@ const {
   serializeWitnesses,
   serializeRawTransaction,
   serializeTransaction,
-} = require('../../../../../dist/index')
+} = require('../../../../../dist')
 const fixtures = require('./fixtures.json')
 
 describe('Test Transaction Serialization', () => {

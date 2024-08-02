@@ -1,6 +1,6 @@
 jest.mock('axios')
 const axiosMock = require('axios')
-const { Method } = require('../../../dist/index')
+const { Method } = require('../../../dist')
 
 describe('Test Method', () => {
   const ranNum = 1

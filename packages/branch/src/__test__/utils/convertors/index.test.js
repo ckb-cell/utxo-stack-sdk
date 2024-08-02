@@ -2,16 +2,18 @@ const {
   toUint16Le,
   toUint32Le,
   toUint64Le,
+  toUint128Le,
   hexToBytes,
   bytesToHex,
   toBigEndian,
   HexStringWithout0xException,
-} = require('../../../../dist/index')
+} = require('../../../../dist')
 
 const {
   uint16Le: uint16LeFixture,
   uint32Le: uint32LeFixture,
   uint64Le: uint64LeFixture,
+  uint128Le: uint128LeFixture,
   hexToBytes: hexToBytesFixture,
   bytesToHex: bytesToHexFixture,
 } = require('./fixtures.json')
@@ -52,6 +54,20 @@ describe('Test toUint64Le', () => {
     } else {
       const actualFromStr = toUint64Le(value)
       const actualFromBigInt = toUint64Le(BigInt(value))
+      expect(actualFromStr).toBe(expected)
+      expect(actualFromBigInt).toBe(expected)
+    }
+  })
+})
+
+describe('Test toUint128Le', () => {
+  const fixtureTable = uint128LeFixture.map(({ value, expected, exception }) => [value, expected, exception])
+  test.each(fixtureTable)(`%s => %s ? %s`, (value, expected, exception) => {
+    if (exception) {
+      expect(() => toUint128Le(value)).toThrow(exception)
+    } else {
+      const actualFromStr = toUint128Le(value)
+      const actualFromBigInt = toUint128Le(BigInt(value))
       expect(actualFromStr).toBe(expected)
       expect(actualFromBigInt).toBe(expected)
     }

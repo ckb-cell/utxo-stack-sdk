@@ -1,4 +1,4 @@
-const { serializeEpoch, parseEpoch } = require('../../../../dist/index')
+const { serializeEpoch, parseEpoch } = require('../../../../dist')
 const fixtures = require('./fixtures.json')
 
 describe('Test epochs', () => {

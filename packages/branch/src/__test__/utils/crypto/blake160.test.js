@@ -1,4 +1,4 @@
-const { blake160 } = require('../../../../dist/index')
+const { blake160 } = require('../../../../dist')
 
 describe('blake160', () => {
   it('blake160', () => {

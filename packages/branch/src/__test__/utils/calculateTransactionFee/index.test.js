@@ -1,4 +1,4 @@
-const { calculateTransactionFee } = require('../../../../dist/index.js')
+const { calculateTransactionFee } = require('../../../../dist')
 const transactionFeeFixtures = require('./fixtures.json')
 
 describe('calculate transaction fee', () => {

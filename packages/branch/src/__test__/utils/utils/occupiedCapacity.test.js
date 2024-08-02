@@ -1,4 +1,4 @@
-const { scriptOccupied, cellOccupied } = require('../../../../dist/index')
+const { scriptOccupied, cellOccupied } = require('../../../../dist')
 
 describe('script occupied', () => {
   it('no args', () => {

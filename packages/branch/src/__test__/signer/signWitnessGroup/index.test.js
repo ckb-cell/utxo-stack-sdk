@@ -1,4 +1,4 @@
-const { signWitnessGroup } = require('../../../../dist/index')
+const { signWitnessGroup } = require('../../../../dist')
 const fixtures = require('./fixtures.json')
 
 describe('test sign witness group', () => {

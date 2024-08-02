@@ -2,7 +2,7 @@ const http = require('http')
 const https = require('https')
 
 const NODE_URL = 'http://localhost:8114'
-const { BranchRPC } = require('../../../dist/index')
+const { BranchRPC } = require('../../../dist')
 
 const rpc = new BranchRPC(NODE_URL)
 describe('branch-rpc settings and helpers', () => {

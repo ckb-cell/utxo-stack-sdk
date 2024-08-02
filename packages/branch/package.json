@@ -1,5 +1,5 @@
 {
-  "name": "@utxo-stack/branch-chain",
+  "name": "@utxo-stack/branch",
   "version": "0.1.0",
   "description": "Branch chain JavaScript SDK of UTXO Stack",
   "homepage": "https://github.com/ckb-cell/utxo-stack-sdk#readme",

@@ -1,5 +1,5 @@
 const { TextDecoder } = require('util')
-const { PERSONAL } = require('../../../dist/index')
+const { PERSONAL } = require('../../../dist')
 
 describe('Test constants', () => {
   it('PERSONAL should be encoded ckb-default-hash', () => {
