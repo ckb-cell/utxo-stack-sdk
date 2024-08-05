@@ -2,7 +2,7 @@
   "name": "utxo-stack-sdk",
   "scripts": {
     "build": "pnpm run --r --filter \"./packages/**\" build",
-    "test": "jest",
+    "test": "pnpm run --r --filter \"./packages/**\" test",
     "format": "eslint --fix --ext .ts,.js && prettier --write './**/*.{ts, js}'",
     "lint": "eslint --ext .ts,.js"
   },
