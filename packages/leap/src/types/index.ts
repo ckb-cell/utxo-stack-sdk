@@ -4,7 +4,7 @@ export type Hex = string
 export enum RequestType {
   CkbToBranch = 1,
   BranchToCkb = 2,
-  BranchToBranch = 3
+  BranchToBranch = 3,
 }
 
 export interface RequestLockArgsProps {
@@ -13,7 +13,7 @@ export interface RequestLockArgsProps {
   transferAmount: bigint
   requestType: RequestType
   requestTypeHash: Hex
-  timeout?: bigint,
-  initialChainId?: Hex,
+  timeout?: bigint
+  initialChainId?: Hex
   targetChainId?: Hex
 }

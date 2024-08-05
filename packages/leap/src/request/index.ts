@@ -1,9 +1,9 @@
-import { Hex, RequestLockArgsProps } from "src/types";
+import { Hex, RequestLockArgsProps } from 'src/types'
 import { RequestLockArgs } from '../molecule/generated/leap'
-import { Byte32 } from "../molecule/generated/blockchain";
+import { Byte32 } from '../molecule/generated/blockchain'
 import { bytesToHex, hexToBytes } from '@utxo-stack/branch'
-import { append0x, u8ToHex } from "src/utils/hex";
-import { blockchain } from "@ckb-lumos/base";
+import { append0x, u8ToHex } from 'src/utils/hex'
+import { blockchain } from '@ckb-lumos/base'
 
 export const buildRequestLockArgs = ({
   ownerLockHash,
@@ -13,7 +13,7 @@ export const buildRequestLockArgs = ({
   requestTypeHash,
   timeout,
   initialChainId,
-  targetChainId
+  targetChainId,
 }: RequestLockArgsProps): Hex => {
   const lockArgs = RequestLockArgs.pack({
     requestTypeHash: append0x(requestTypeHash),

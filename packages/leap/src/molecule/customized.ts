@@ -1,6 +1,6 @@
-import { createFixedBytesCodec, number } from '@ckb-lumos/codec';
+import { createFixedBytesCodec, number } from '@ckb-lumos/codec'
 
-const { Uint32, Uint64, Uint128 } = number;
+const { Uint32, Uint64, Uint128 } = number
 
 /**
  * <pre>
@@ -25,15 +25,15 @@ const HashType = createFixedBytesCodec<'data' | 'type' | 'data1' | 'data2'>({
 
     throw new Error('Unknown hash type')
   },
-  unpack: (byte) => {
-    if (byte[0] === 0b0000000_1) return 'type';
-    if (byte[0] === 0b0000000_0) return 'data';
-    if (byte[0] === 0b0000001_0) return 'data1';
-    if (byte[0] === 0b0000010_0) return 'data2';
+  unpack: byte => {
+    if (byte[0] === 0b0000000_1) return 'type'
+    if (byte[0] === 0b0000000_0) return 'data'
+    if (byte[0] === 0b0000001_0) return 'data1'
+    if (byte[0] === 0b0000010_0) return 'data2'
 
-    throw new Error('Unknown hash type');
+    throw new Error('Unknown hash type')
   },
-});
+})
 
 const DepType = createFixedBytesCodec<'code' | 'depGroup'>({
   byteLength: 1,
@@ -44,12 +44,12 @@ const DepType = createFixedBytesCodec<'code' | 'depGroup'>({
 
     throw new Error("Unknown dep type");
   },
-  unpack: (byte) => {
-    if (byte[0] === 0) return 'code';
-    if (byte[0] === 1) return 'depGroup';
+  unpack: byte => {
+    if (byte[0] === 0) return 'code'
+    if (byte[0] === 1) return 'depGroup'
 
-    throw new Error('Unknown dep type');
+    throw new Error('Unknown dep type')
   },
-});
+})
 
-export { Uint32, Uint64, Uint128, DepType, HashType };
+export { Uint32, Uint64, Uint128, DepType, HashType }
