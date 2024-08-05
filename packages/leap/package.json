@@ -38,6 +38,6 @@
     "@utxo-stack/branch": "workspace:*"
   },
   "devDependencies": {
-    "@ckb-lumos/molecule": "^0.23.0"
+    "@ckb-lumos/molecule": "0.0.0-canary-66bbbfd-20240805132534"
   }
 }
