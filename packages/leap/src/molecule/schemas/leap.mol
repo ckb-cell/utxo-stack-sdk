@@ -1,0 +1,58 @@
+import blockchain;
+
+table RequestLockArgs {
+    // request contract, unlock if input cells type_hash match this
+    request_type_hash: Byte32,
+    // lock hash can be used to cancel request
+    owner_lock_hash: Byte32,
+    // request timeout
+    timeout: Uint64,
+    // content of request
+    content: RequestContent,
+}
+
+// RGB++ cross chain contract
+table CrossChainQueue {
+  // locked assets root
+  locked_assets: Byte32,
+  // Outbox
+  outbox: Byte32Vec,
+  // Inbox
+  inbox: Byte32Vec,
+}
+
+// Vector of request body
+vector Requests <Request>;
+
+// Cross chain Request
+table Request {
+  // out_point of request cell
+  request_cell: OutPoint,
+  // request content
+  request_content: RequestContent,
+}
+
+// Cross chain Request content
+table RequestContent {
+  // 1:ckb->branch, 2:branch->ckb, 3:branch->branch
+  request_type: byte,
+  // initial chain id
+  initial_chain_id: Bytes,
+  // target chain id
+  target_chain_id: Bytes,
+  // message
+  message: Message,
+}
+
+// All cross chain messages
+union Message {
+  Transfer,
+}
+
+// Transfer
+struct Transfer {
+  owner_lock_hash: Byte32,
+  amount: Uint128,
+  // asset type
+  asset_type: Byte32,
+}

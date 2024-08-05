@@ -1,0 +1,43 @@
+{
+  "name": "@utxo-stack/leap",
+  "version": "0.1.0",
+  "description": "JavaScript SDK for leaping between CKB and branch chains of UTXO Stack",
+  "homepage": "https://github.com/ckb-cell/utxo-stack-sdk#readme",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckb-cell/utxo-stack-sdk.git"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest"
+  },
+  "bugs": {
+    "url": "https://github.com/ckb-cell/utxo-stack-sdk/issues"
+  },
+  "dependencies": {
+    "axios": "1.7.2",
+    "@ckb-lumos/codec": "^0.23.0",
+    "@ckb-lumos/base": "^0.23.0",
+    "@utxo-stack/branch": "workspace:*"
+  },
+  "devDependencies": {
+    "@ckb-lumos/molecule": "^0.23.0"
+  }
+}
