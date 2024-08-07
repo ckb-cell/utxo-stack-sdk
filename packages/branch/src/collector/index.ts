@@ -1,6 +1,7 @@
 import { Branch } from '../signer'
 import { CellIndexer } from '../indexer'
-import { BranchComponents, CollectResult, Hex, IndexerCell, IndexerSearchKey } from '../types'
+import { BranchComponents, CollectResult, CollectUdtResult, Hex, IndexerCell, IndexerSearchKey } from '../types'
+import { remove0x, leToUInt } from 'src/utils'
 
 const MIN_CAPACITY = BigInt(61)
 
@@ -67,6 +68,35 @@ export class Collector {
     return { inputs, sumInputsCapacity }
   }
 
+  collectUdtInputs(liveCells: IndexerCell[], needAmount: bigint): CollectUdtResult {
+    const udtInputs: BranchComponents.CellInput[] = []
+    let sumUdtInputsCapacity = BigInt(0)
+    let sumAmount = BigInt(0)
+    for (const cell of liveCells) {
+      if (cell.outputData === '0x') {
+        continue
+      }
+      udtInputs.push({
+        previousOutput: {
+          txHash: cell.outPoint.txHash,
+          index: cell.outPoint.index,
+        },
+        since: '0x0',
+      })
+      sumUdtInputsCapacity = sumUdtInputsCapacity + BigInt(cell.output.capacity)
+      // XUDT cell.data = <amount: uint128> <xudt data (optional)>
+      // Ref: https://blog.cryptape.com/enhance-sudts-programmability-with-xudt#heading-xudt-cell
+      sumAmount += leToUInt(remove0x(cell.outputData).slice(0, 32))
+      if (sumAmount >= needAmount) {
+        break
+      }
+    }
+    if (sumAmount < needAmount) {
+      throw new Error('Insufficient UDT balance')
+    }
+    return { udtInputs, sumUdtInputsCapacity, sumAmount }
+  }
+
   async getLiveCell(outPoint: BranchComponents.OutPoint, withData = false): Promise<BranchComponents.LiveCell> {
     const { cell } = await this.branch.rpc.getLiveCell(outPoint, withData)
     return cell
@@ -75,5 +105,10 @@ export class Collector {
   async getLiveCells(outPoints: BranchComponents.OutPoint[], withData = false): Promise<BranchComponents.LiveCell[]> {
     const batch = this.branch.rpc.createBatchRequest(outPoints.map(outPoint => ['getLiveCell', outPoint, withData]))
     return batch.exec().then(liveCells => liveCells.map(liveCell => liveCell.cell))
+  }
+
+  async getTransactionsByOutPoints(outPoints: BranchComponents.OutPoint[]): Promise<BranchComponents.Transaction[]> {
+    const batch = this.branch.rpc.createBatchRequest(outPoints.map(({ txHash }) => ['getTransaction', txHash]))
+    return batch.exec().then(txs => txs.map(tx => tx.transaction))
   }
 }

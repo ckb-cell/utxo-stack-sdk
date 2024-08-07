@@ -1,5 +1,16 @@
-import { assertToBeHexStringOrBigint, assertToBeHexString } from '../validators'
+import { assertToBeHexStringOrBigint } from '../validators'
 import { HexStringWithout0xException } from '../exceptions'
+
+export const remove0x = (hex: string): string => {
+  if (hex.startsWith('0x')) {
+    return hex.substring(2)
+  }
+  return hex
+}
+
+export const append0x = (hex: string): string => {
+  return hex.startsWith('0x') ? hex : `0x${hex}`
+}
 
 /**
  * Converts an uint16 into a hex string in little endian
@@ -80,13 +91,16 @@ export const hexToBytes = (rawhex: string | number | bigint) => {
  * Converts a hex string in little endian into big endian
  *
  * @memberof convertors
- * @param {string} le16 The hex string to convert
+ * @param {string} leHex The hex string to convert
  * @returns {string} Returns a big endian
  */
 export const toBigEndian = (leHex: string) => {
-  assertToBeHexString(leHex)
-  const bytes = hexToBytes(leHex)
+  const bytes = hexToBytes(append0x(leHex))
   return `0x${bytes.reduceRight((pre, cur) => pre + cur.toString(16).padStart(2, '0'), '')}`
+}
+
+export const leToUInt = (leHex: string) => {
+  return BigInt(toBigEndian(leHex))
 }
 
 export const bytesToHex = (bytes: Uint8Array): string =>

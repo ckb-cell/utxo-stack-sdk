@@ -1,16 +1,5 @@
 import { bytesToHex, hexToBytes } from '@utxo-stack/branch'
 
-export const remove0x = (hex: string): string => {
-  if (hex.startsWith('0x')) {
-    return hex.substring(2)
-  }
-  return hex
-}
-
-export const append0x = (hex?: string): string => {
-  return hex?.startsWith('0x') ? hex : `0x${hex}`
-}
-
 const ArrayBufferToHex = (arrayBuffer: ArrayBuffer): string => {
   return Array.prototype.map.call(new Uint8Array(arrayBuffer), x => ('00' + x.toString(16)).slice(-2)).join('')
 }

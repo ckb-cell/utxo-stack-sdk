@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildRequestLockArgs } from '.'
+import { buildRequestLockArgs } from './lock-args'
 import { RequestType } from '../types'
 
 describe('Leap request schemas', () => {
