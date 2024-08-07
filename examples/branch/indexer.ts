@@ -1,4 +1,4 @@
-import { BranchComponents, CellIndexer } from '@utxo-stack/branch-chain'
+import { BranchComponents, CellIndexer } from '@utxo-stack/branch'
 
 const run = async () => {
   const lock: BranchComponents.Script = {

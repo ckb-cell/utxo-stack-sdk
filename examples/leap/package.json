@@ -1,0 +1,10 @@
+{
+  "name": "leap-examples",
+  "version": "0.1.0",
+  "description": "Leap examples of UTXO Stack",
+  "type": "commonjs",
+  "dependencies": {
+    "@utxo-stack/branch": "workspace:*",
+    "@utxo-stack/leap": "workspace:*"
+  }
+}

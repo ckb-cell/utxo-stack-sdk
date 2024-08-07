@@ -5,7 +5,7 @@ import {
   BranchComponents,
   EMPTY_WITNESS_ARGS,
   privateKeyToAddress,
-} from '@utxo-stack/branch-chain'
+} from '@utxo-stack/branch'
 
 const SECP256K1_PRIVATE_KEY = '0x'
 const TRANSFER_SATOSHI = BigInt(10000)
@@ -20,7 +20,7 @@ const transferSatoshi = async () => {
   if (cells.length === 0) {
     throw new Error('No empty cells found')
   }
-  const { inputs, sumInputsCapacity } = await collector.collectInputs(cells, TRANSFER_SATOSHI, Fee)
+  const { inputs, sumInputsCapacity } = collector.collectInputs(cells, TRANSFER_SATOSHI, Fee)
 
   const outputs: BranchComponents.CellOutput[] = [
     {

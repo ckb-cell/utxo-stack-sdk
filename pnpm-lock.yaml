@@ -72,6 +72,15 @@ importers:
         specifier: workspace:*
         version: link:../../packages/branch
 
+  examples/leap:
+    dependencies:
+      '@utxo-stack/branch':
+        specifier: workspace:*
+        version: link:../../packages/branch
+      '@utxo-stack/leap':
+        specifier: workspace:*
+        version: link:../../packages/leap
+
   packages/branch:
     dependencies:
       axios:
