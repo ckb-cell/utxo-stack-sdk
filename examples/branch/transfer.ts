@@ -1,21 +1,12 @@
-import {
-  AddressPrefix,
-  addressToScript,
-  Collector,
-  BranchComponents,
-  EMPTY_WITNESS_ARGS,
-  privateKeyToAddress,
-} from '@utxo-stack/branch'
+import { addressToScript, BranchComponents, EMPTY_WITNESS_ARGS } from '@utxo-stack/branch'
+import { BRANCH_PRIVATE_KEY, branchAddress, collector } from './env'
 
-const SECP256K1_PRIVATE_KEY = '0x'
 const TRANSFER_SATOSHI = BigInt(10000)
 const Fee = BigInt(600)
 
 const transferSatoshi = async () => {
-  const address = privateKeyToAddress(SECP256K1_PRIVATE_KEY, { prefix: AddressPrefix.Testnet })
-  const lock = addressToScript(address)
+  const lock = addressToScript(branchAddress)
 
-  const collector = new Collector({ indexerUrl: 'http://localhost:8114', nodeUrl: 'http://localhost:8114' })
   const cells = await collector.getCells({ lock })
   if (cells.length === 0) {
     throw new Error('No empty cells found')
@@ -44,7 +35,7 @@ const transferSatoshi = async () => {
     outputsData: ['0x', '0x'],
     witnesses,
   }
-  const signedTx = collector.branch.signTransaction(SECP256K1_PRIVATE_KEY)(rawTx)
+  const signedTx = collector.branch.signTransaction(BRANCH_PRIVATE_KEY)(rawTx)
   const txHash = await collector.branch.rpc.sendTransaction(signedTx)
 
   console.log('txHash', txHash)

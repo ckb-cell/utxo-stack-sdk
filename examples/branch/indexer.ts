@@ -1,4 +1,5 @@
 import { BranchComponents, CellIndexer } from '@utxo-stack/branch'
+import { BRANCH_NODE_URL } from './env'
 
 const run = async () => {
   const lock: BranchComponents.Script = {
@@ -6,7 +7,7 @@ const run = async () => {
     hashType: 'type',
     args: '0xc8328aabcd9b9e8e64fbc566c4385c3bdeb219d7',
   }
-  const indexer = new CellIndexer('http://localhost:8114')
+  const indexer = new CellIndexer(BRANCH_NODE_URL)
 
   const balance = await indexer.getCellsCapacity({ script: lock, scriptType: 'lock' })
   console.log('balance capacity', BigInt(balance.capacity).toString())
