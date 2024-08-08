@@ -64,9 +64,9 @@ export const toUint64Le = (uint64: string | bigint) => {
  */
 export const toUint128Le = (uint128: string | bigint) => {
   assertToBeHexStringOrBigint(uint128)
-  const val = (typeof uint128 === 'bigint' ? uint128.toString(16) : uint128.slice(2)).padStart(16, '0')
-  const viewRight = toUint64Le(`0x${val.slice(0, 8)}`).slice(2)
-  const viewLeft = toUint64Le(`0x${val.slice(8)}`).slice(2)
+  const val = (typeof uint128 === 'bigint' ? uint128.toString(16) : uint128.slice(2)).padStart(32, '0')
+  const viewRight = toUint64Le(`0x${val.slice(0, 16)}`).slice(2)
+  const viewLeft = toUint64Le(`0x${val.slice(16)}`).slice(2)
   return `0x${viewLeft}${viewRight}`
 }
 

@@ -3,6 +3,7 @@ import {
   append0x,
   BranchComponents,
   calculateTransactionFee,
+  EMPTY_WITNESS_ARGS,
   getTransactionSize,
   Hex,
   scriptToHash,
@@ -99,7 +100,7 @@ export const genLeapingFromCkbToBranchRequestTx = async ({
   })
   outputsData.push('0x')
 
-  const witnesses = new Array(inputs.length).fill('0x')
+  const witnesses = inputs.map((_, index) => (index === 0 ? EMPTY_WITNESS_ARGS : '0x'))
 
   const cellDeps = [getXudtDep(isMainnet)]
 
@@ -132,7 +133,7 @@ export const genUnlockingRequestCellsTx = async ({
   witnessLockPlaceholderSize,
 }: UnlockRequestCellsParams) => {
   const requestTransactions = await collector.getTransactionsByOutPoints(requestOutPoints)
-  const { codeHash, args } = getRequestLockScript(isMainnet)
+  const { codeHash, hashType } = getRequestLockScript(isMainnet)
   const lock = addressToScript(ckbAddress)
 
   const inputs: BranchComponents.CellInput[] = []
@@ -144,7 +145,7 @@ export const genUnlockingRequestCellsTx = async ({
     const txIndex = parseInt(outPoint.index, 16)
     const requestOutput = tx.outputs[txIndex]
     if (requestOutput) {
-      if (requestOutput.lock.args !== args || requestOutput.lock.codeHash !== codeHash) {
+      if (requestOutput.lock.hashType !== hashType || requestOutput.lock.codeHash !== codeHash) {
         throw new Error('No request cells found with specific out points')
       }
       const { timeout } = RequestLockArgs.unpack(requestOutput.lock.args)
@@ -176,7 +177,7 @@ export const genUnlockingRequestCellsTx = async ({
   outputs.push(payFeeCell.output)
   outputsData.push(payFeeCell.outputData)
 
-  const witnesses = new Array(inputs.length).fill('0x')
+  const witnesses = inputs.map((_, index) => (index === inputs.length - 1 ? EMPTY_WITNESS_ARGS : '0x'))
 
   const cellDeps = [getXudtDep(isMainnet), getRequestDep(isMainnet)]
 

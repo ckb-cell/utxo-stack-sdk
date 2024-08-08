@@ -9,9 +9,9 @@ export class Collector {
   branch: Branch
   indexer: CellIndexer
 
-  constructor({ nodeUrl, indexerUrl }: { nodeUrl: string; indexerUrl: string }) {
+  constructor(nodeUrl: string) {
     this.branch = new Branch(nodeUrl)
-    this.indexer = new CellIndexer(indexerUrl)
+    this.indexer = new CellIndexer(nodeUrl)
   }
 
   async getCells({

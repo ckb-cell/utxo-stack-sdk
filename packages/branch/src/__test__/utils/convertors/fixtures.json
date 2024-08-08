@@ -98,7 +98,7 @@
   "uint128Le": [
     {
       "value": "0x1234567890abcdef",
-      "expected": "0xefcdab90000000007856341200000000"
+      "expected": "0xefcdab90785634120000000000000000"
     },
     {
       "value": "0x3e8",
