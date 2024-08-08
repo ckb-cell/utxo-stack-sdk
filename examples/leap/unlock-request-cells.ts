@@ -20,8 +20,10 @@ const unlockRequestCells = async () => {
     ],
     isMainnet,
   })
+  // If you use another lock script(JoyID, omni, etc.), the related cellDep should be added to cellDeps
   unsignedTx.cellDeps.push(getSecp256k1CellDep(isMainnet))
 
+  // If you use another lock script(JoyID, omni, etc.), the related signer should be used to sign the transaction
   const keyMap = new Map<string, string>()
   keyMap.set(scriptToHash(addressToScript(ckbAddress)), CKB_PRIVATE_KEY)
   keyMap.set(scriptToHash(getRequestLockScript(isMainnet)), '')

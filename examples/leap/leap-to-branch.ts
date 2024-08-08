@@ -10,6 +10,7 @@ import { CKB_PRIVATE_KEY, ckbAddress, collector, isMainnet } from './env'
 const leapXudtToBranch = async () => {
   // owner can unlock request cell after 10 ckb blocks
   const timeout = generateTimeout({ relative: true, type: 'blockNumber', value: BigInt(10) })
+  // The request type hash is from the Message Queue cell of CKB
   const requestTypeHash = scriptToHash({
     codeHash: '0x2da1e80cec3e553a76e22d826b63ce5f65d77622de48caa5a2fe724b0f9a18f2',
     args: '0x4242',
@@ -28,8 +29,10 @@ const leapXudtToBranch = async () => {
     targetChainId: '0x1234',
     isMainnet,
   })
+  // If you use another lock script(JoyID, omni, etc.), the related cellDep should be added to cellDeps
   unsignedTx.cellDeps.push(getSecp256k1CellDep(isMainnet))
 
+  // If you use another lock script(JoyID, omni, etc.), the related signer should be used to sign the transaction
   const signedTx = collector.branch.signTransaction(CKB_PRIVATE_KEY)(unsignedTx)
   const txHash = await collector.branch.rpc.sendTransaction(signedTx)
 
