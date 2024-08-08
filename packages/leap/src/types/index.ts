@@ -31,6 +31,7 @@ export interface LeapingFromCkbToBranchParams {
   timeout?: Hex
   targetChainId?: Hex
   feeRate?: number
+  witnessLockPlaceholderSize?: number
 }
 
 export interface UnlockRequestCellsParams {
@@ -39,4 +40,5 @@ export interface UnlockRequestCellsParams {
   requestOutPoints: BranchComponents.OutPoint[]
   isMainnet: boolean
   feeRate?: number
+  witnessLockPlaceholderSize?: number
 }

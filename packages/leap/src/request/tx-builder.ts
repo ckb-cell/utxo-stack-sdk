@@ -8,7 +8,13 @@ import {
   scriptToHash,
   toUint128Le,
 } from '@utxo-stack/branch'
-import { getRequestDep, getRequestLockScript, getXudtDep, MAX_FEE } from 'src/constants'
+import {
+  getRequestDep,
+  getRequestLockScript,
+  getXudtDep,
+  MAX_FEE,
+  WITNESS_LOCK_DEFAULT_PLACEHOLDER,
+} from 'src/constants'
 import { LeapingFromCkbToBranchParams, RequestType, UnlockRequestCellsParams } from 'src/types'
 import { buildRequestLockArgs } from './lock-args'
 import { calculateCellCapacity } from 'src/utils'
@@ -24,6 +30,7 @@ export const genLeapingFromCkbToBranchRequestTx = async ({
   targetChainId,
   isMainnet,
   feeRate,
+  witnessLockPlaceholderSize,
 }: LeapingFromCkbToBranchParams) => {
   const fromLock = addressToScript(fromCkbAddress)
   const requestLockScript: BranchComponents.Script = {
@@ -107,7 +114,7 @@ export const genLeapingFromCkbToBranchRequestTx = async ({
   }
 
   if (txFee === MAX_FEE) {
-    const txSize = getTransactionSize(unsignedTx)
+    const txSize = getTransactionSize(unsignedTx) + (witnessLockPlaceholderSize ?? WITNESS_LOCK_DEFAULT_PLACEHOLDER)
     const estimatedTxFee = BigInt(calculateTransactionFee(txSize, feeRate ?? 1100))
     changeCapacity -= estimatedTxFee
     unsignedTx.outputs[unsignedTx.outputs.length - 1].capacity = append0x(changeCapacity.toString(16))
@@ -122,6 +129,7 @@ export const genUnlockingRequestCellsTx = async ({
   requestOutPoints,
   isMainnet,
   feeRate,
+  witnessLockPlaceholderSize,
 }: UnlockRequestCellsParams) => {
   const requestTransactions = await collector.getTransactionsByOutPoints(requestOutPoints)
   const { codeHash, args } = getRequestLockScript(isMainnet)
@@ -152,6 +160,22 @@ export const genUnlockingRequestCellsTx = async ({
     }
   }
 
+  // Collect an empty cell to pay transaction fee
+  let emptyCells = await collector.getCells({
+    lock,
+  })
+  if (!emptyCells || emptyCells.length === 0) {
+    throw new Error('The address has no empty cells')
+  }
+  emptyCells = emptyCells.filter(cell => !cell.output.type)
+  const payFeeCell = emptyCells[0]
+  inputs.push({
+    previousOutput: payFeeCell.outPoint,
+    since: '0x0',
+  })
+  outputs.push(payFeeCell.output)
+  outputsData.push(payFeeCell.outputData)
+
   const witnesses = new Array(inputs.length).fill('0x')
 
   const cellDeps = [getXudtDep(isMainnet), getRequestDep(isMainnet)]
@@ -166,7 +190,7 @@ export const genUnlockingRequestCellsTx = async ({
     witnesses,
   }
 
-  const txSize = getTransactionSize(unsignedTx)
+  const txSize = getTransactionSize(unsignedTx) + (witnessLockPlaceholderSize ?? WITNESS_LOCK_DEFAULT_PLACEHOLDER)
   const estimatedTxFee = BigInt(calculateTransactionFee(txSize, feeRate ?? 1100))
   const lastCapacity = BigInt(outputs[outputs.length - 1].capacity)
   unsignedTx.outputs[outputs.length - 1].capacity = append0x((lastCapacity - estimatedTxFee).toString(16))
