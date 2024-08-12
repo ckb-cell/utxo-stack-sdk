@@ -5,7 +5,7 @@ const run = async () => {
   const lock: BranchComponents.Script = {
     codeHash: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
     hashType: 'type',
-    args: '0xc8328aabcd9b9e8e64fbc566c4385c3bdeb219d7',
+    args: '0xf9a9ad51ed14936d33f7bb854aaefa5f47a3ccbd',
   }
   const indexer = new CellIndexer(BRANCH_NODE_URL)
 

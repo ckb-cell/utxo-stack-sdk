@@ -38,7 +38,7 @@ const transferSatoshi = async () => {
   const signedTx = collector.branch.signTransaction(BRANCH_PRIVATE_KEY)(rawTx)
   const txHash = await collector.branch.rpc.sendTransaction(signedTx)
 
-  console.log('txHash', txHash)
+  console.log('Transfer satoshi on Branch chain successfully and tx hash is', txHash)
 }
 
 transferSatoshi()
