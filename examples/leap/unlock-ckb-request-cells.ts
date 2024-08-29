@@ -5,12 +5,12 @@ import {
   serializeWitnessArgs,
   signWitnesses,
 } from '@utxo-stack/branch'
-import { genUnlockingRequestCellsTx, getRequestLockScript, getSecp256k1CellDep } from '@utxo-stack/leap'
-import { CKB_PRIVATE_KEY, ckbAddress, collector, isMainnet } from './env'
+import { genUnlockingCkbRequestCellsTx, getCkbRequestLockScript, getCkbSecp256k1CellDep } from '@utxo-stack/leap'
+import { CKB_PRIVATE_KEY, ckbAddress, ckbCollector, isMainnet } from './env'
 
 const unlockRequestCells = async () => {
-  const unsignedTx = await genUnlockingRequestCellsTx({
-    collector,
+  const unsignedTx = await genUnlockingCkbRequestCellsTx({
+    ckbCollector,
     ckbAddress,
     requestOutPoints: [
       {
@@ -21,18 +21,18 @@ const unlockRequestCells = async () => {
     isMainnet,
   })
   // If you use another lock script(JoyID, omni, etc.), the related cellDep should be added to cellDeps
-  unsignedTx.cellDeps.push(getSecp256k1CellDep(isMainnet))
+  unsignedTx.cellDeps.push(getCkbSecp256k1CellDep(isMainnet))
 
   // If you use another lock script(JoyID, omni, etc.), the related signer should be used to sign the transaction
   const keyMap = new Map<string, string>()
   keyMap.set(scriptToHash(addressToScript(ckbAddress)), CKB_PRIVATE_KEY)
-  keyMap.set(scriptToHash(getRequestLockScript(isMainnet)), '')
+  keyMap.set(scriptToHash(getCkbRequestLockScript(isMainnet)), '')
 
   // The cell to pay transaction fee is at the last of the inputs
   const feePaidCellIndex = unsignedTx.inputs.length - 1
   const cells = unsignedTx.inputs.map((input, index) => ({
     outPoint: input.previousOutput,
-    lock: index === feePaidCellIndex ? addressToScript(ckbAddress) : getRequestLockScript(isMainnet),
+    lock: index === feePaidCellIndex ? addressToScript(ckbAddress) : getCkbRequestLockScript(isMainnet),
   }))
 
   const emptyWitness = { lock: '', inputType: '', outputType: '' }
@@ -50,9 +50,9 @@ const unlockRequestCells = async () => {
     ...unsignedTx,
     witnesses: signedWitnesses.map(witness => (typeof witness !== 'string' ? serializeWitnessArgs(witness) : witness)),
   }
-  const txHash = await collector.branch.rpc.sendTransaction(signedTx)
+  const txHash = await ckbCollector.branch.rpc.sendTransaction(signedTx)
 
-  console.log('Unlock request cells and CKB tx hash is', txHash)
+  console.log('Unlock CKB request cells and CKB tx hash is', txHash)
 }
 
 unlockRequestCells()
