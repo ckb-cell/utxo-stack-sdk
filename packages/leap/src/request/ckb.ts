@@ -10,19 +10,19 @@ import {
   toUint128Le,
 } from '@utxo-stack/branch'
 import {
-  getRequestDep,
-  getRequestLockScript,
-  getXudtDep,
+  getCkbRequestDep,
+  getCkbRequestLockScript,
+  getCkbXudtDep,
   MAX_FEE,
   WITNESS_LOCK_DEFAULT_PLACEHOLDER,
 } from 'src/constants'
-import { LeapingFromCkbToBranchParams, RequestType, UnlockRequestCellsParams } from 'src/types'
+import { LeapingFromCkbToBranchParams, RequestType, UnlockCkbRequestCellsParams } from 'src/types'
 import { buildRequestLockArgs } from './lock-args'
 import { calculateCellCapacity } from 'src/utils'
 import { RequestLockArgs } from 'src/molecule/generated/leap'
 
 export const genLeapingFromCkbToBranchRequestTx = async ({
-  collector,
+  ckbCollector,
   fromCkbAddress,
   assetTypeScript,
   transferAmount,
@@ -35,7 +35,7 @@ export const genLeapingFromCkbToBranchRequestTx = async ({
 }: LeapingFromCkbToBranchParams) => {
   const fromLock = addressToScript(fromCkbAddress)
   const requestLockScript: BranchComponents.Script = {
-    ...getRequestLockScript(isMainnet),
+    ...getCkbRequestLockScript(isMainnet),
     args: buildRequestLockArgs({
       ownerLockHash: scriptToHash(fromLock),
       assetTypeHash: scriptToHash(assetTypeScript),
@@ -53,8 +53,8 @@ export const genLeapingFromCkbToBranchRequestTx = async ({
     capacity: append0x(requestCellCapacity.toString(16)),
   }
 
-  const assetCells = await collector.getCells({ lock: fromLock, type: assetTypeScript })
-  const { udtInputs, sumUdtInputsCapacity, sumAmount } = collector.collectUdtInputs(assetCells, transferAmount)
+  const assetCells = await ckbCollector.getCells({ lock: fromLock, type: assetTypeScript })
+  const { udtInputs, sumUdtInputsCapacity, sumAmount } = ckbCollector.collectUdtInputs(assetCells, transferAmount)
 
   let actualInputsCapacity = sumUdtInputsCapacity
   let sumUdtOutputCapacity = requestCellCapacity
@@ -76,7 +76,7 @@ export const genLeapingFromCkbToBranchRequestTx = async ({
 
   const txFee = MAX_FEE
   if (sumUdtInputsCapacity <= sumUdtOutputCapacity) {
-    let emptyCells = await collector.getCells({
+    let emptyCells = await ckbCollector.getCells({
       lock: fromLock,
     })
     if (!emptyCells || emptyCells.length === 0) {
@@ -84,7 +84,7 @@ export const genLeapingFromCkbToBranchRequestTx = async ({
     }
     emptyCells = emptyCells.filter(cell => !cell.output.type)
     const needCapacity = sumUdtOutputCapacity - sumUdtInputsCapacity
-    const { inputs: emptyInputs, sumInputsCapacity: sumEmptyCapacity } = collector.collectInputs(
+    const { inputs: emptyInputs, sumInputsCapacity: sumEmptyCapacity } = ckbCollector.collectInputs(
       emptyCells,
       needCapacity,
       txFee,
@@ -102,7 +102,7 @@ export const genLeapingFromCkbToBranchRequestTx = async ({
 
   const witnesses = inputs.map((_, index) => (index === 0 ? EMPTY_WITNESS_ARGS : '0x'))
 
-  const cellDeps = [getXudtDep(isMainnet)]
+  const cellDeps = [getCkbXudtDep(isMainnet)]
 
   const unsignedTx = {
     version: '0x0',
@@ -124,16 +124,16 @@ export const genLeapingFromCkbToBranchRequestTx = async ({
   return unsignedTx
 }
 
-export const genUnlockingRequestCellsTx = async ({
-  collector,
+export const genUnlockingCkbRequestCellsTx = async ({
+  ckbCollector,
   ckbAddress,
   requestOutPoints,
   isMainnet,
   feeRate,
   witnessLockPlaceholderSize,
-}: UnlockRequestCellsParams) => {
-  const requestTransactions = await collector.getTransactionsByOutPoints(requestOutPoints)
-  const { codeHash, hashType } = getRequestLockScript(isMainnet)
+}: UnlockCkbRequestCellsParams) => {
+  const requestTransactions = await ckbCollector.getTransactionsByOutPoints(requestOutPoints)
+  const { codeHash, hashType } = getCkbRequestLockScript(isMainnet)
   const lock = addressToScript(ckbAddress)
 
   const inputs: BranchComponents.CellInput[] = []
@@ -162,7 +162,7 @@ export const genUnlockingRequestCellsTx = async ({
   }
 
   // Collect an empty cell to pay transaction fee
-  let emptyCells = await collector.getCells({
+  let emptyCells = await ckbCollector.getCells({
     lock,
   })
   if (!emptyCells || emptyCells.length === 0) {
@@ -179,7 +179,7 @@ export const genUnlockingRequestCellsTx = async ({
 
   const witnesses = inputs.map((_, index) => (index === inputs.length - 1 ? EMPTY_WITNESS_ARGS : '0x'))
 
-  const cellDeps = [getXudtDep(isMainnet), getRequestDep(isMainnet)]
+  const cellDeps = [getCkbXudtDep(isMainnet), getCkbRequestDep(isMainnet)]
 
   const unsignedTx = {
     version: '0x0',

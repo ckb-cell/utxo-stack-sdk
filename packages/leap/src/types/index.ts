@@ -22,7 +22,7 @@ export interface RequestLockArgsParams {
 }
 
 export interface LeapingFromCkbToBranchParams {
-  collector: Collector
+  ckbCollector: Collector
   fromCkbAddress: CKBAddress
   assetTypeScript: BranchComponents.Script
   transferAmount: bigint
@@ -34,9 +34,32 @@ export interface LeapingFromCkbToBranchParams {
   witnessLockPlaceholderSize?: number
 }
 
-export interface UnlockRequestCellsParams {
-  collector: Collector
+export interface UnlockCkbRequestCellsParams {
+  ckbCollector: Collector
   ckbAddress: CKBAddress
+  requestOutPoints: BranchComponents.OutPoint[]
+  isMainnet: boolean
+  feeRate?: number
+  witnessLockPlaceholderSize?: number
+}
+
+export interface LeapingFromBranchToCkbParams {
+  branchCollector: Collector
+  fromCkbAddress?: CKBAddress
+  fromBranchAddress: CKBAddress
+  assetTypeScript: BranchComponents.Script
+  transferAmount: bigint
+  requestTypeHash: Hex
+  isMainnet: boolean
+  timeout?: Hex
+  targetChainId?: Hex
+  feeRate?: number
+  witnessLockPlaceholderSize?: number
+}
+
+export interface UnlockBranchRequestCellsParams {
+  branchCollector: Collector
+  fromBranchAddress: CKBAddress
   requestOutPoints: BranchComponents.OutPoint[]
   isMainnet: boolean
   feeRate?: number
